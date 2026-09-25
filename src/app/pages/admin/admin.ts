@@ -12,7 +12,7 @@ import { ProdutoService, Produto } from '../../services/produto/produto';
 export class Admin {
   logado = false;
   senhaDigitada = '';
-  erroLogin = false;
+  mostrarSenha = false;
   private readonly senhaCorreta = 'fcustom123'; 
 
   produtos: Produto[] = [];
@@ -26,11 +26,14 @@ export class Admin {
   entrar(): void {
     if (this.senhaDigitada === this.senhaCorreta) {
       this.logado = true;
-      this.erroLogin = false;
       this.carregarProdutos();
     } else {
-      this.erroLogin = true;
+      alert('Senha incorreta!');
     }
+  }
+
+  alternarMostrarSenha(): void {
+    this.mostrarSenha = !this.mostrarSenha;
   }
 
   sair(): void {
