@@ -1,0 +1,108 @@
+<!-- Tela de login do admin -->
+<section class="login-admin" *ngIf="!logado">
+  <h1>Painel Administrativo</h1>
+  <p>Digite a senha para acessar</p>
+
+  <input
+    type="password"
+    [(ngModel)]="senhaDigitada"
+    placeholder="Senha"
+    (keyup.enter)="entrar()"
+  />
+  <button (click)="entrar()">Entrar</button>
+
+  <p class="erro" *ngIf="erroLogin">Senha incorreta!</p>
+</section>
+
+<!-- Painel administrativo (só aparece depois do login) -->
+<section class="painel-admin" *ngIf="logado">
+  <div class="topo-admin">
+    <h1>Painel Administrativo</h1>
+    <button class="btn-sair" (click)="sair()">Sair</button>
+  </div>
+
+  <!-- Formulário: serve tanto para adicionar quanto para editar -->
+  <div class="form-produto">
+    <h2>{{ editando ? 'Editar produto' : 'Adicionar produto' }}</h2>
+
+    <label for="nome">Nome do produto</label>
+    <input
+      id="nome"
+      type="text"
+      [(ngModel)]="produtoEmEdicao.nome"
+      placeholder="Ex: Camiseta Preta"
+    />
+
+    <label for="preco">Preço (R$)</label>
+    <input
+      id="preco"
+      type="number"
+      min="0"
+      step="0.01"
+      [(ngModel)]="produtoEmEdicao.preco"
+      placeholder="Ex: 79.90"
+    />
+
+    <label for="categoria">Categoria</label>
+    <select id="categoria" [(ngModel)]="produtoEmEdicao.categoria">
+      <option *ngFor="let categoria of categorias" [value]="categoria">
+        {{ categoria }}
+      </option>
+    </select>
+
+    <label for="imagem">URL da imagem</label>
+    <input
+      id="imagem"
+      type="text"
+      [(ngModel)]="produtoEmEdicao.imagem"
+      placeholder="/images/produto.png"
+    />
+
+    <label for="descricao">Descrição</label>
+    <textarea
+      id="descricao"
+      [(ngModel)]="produtoEmEdicao.descricao"
+      placeholder="Descrição do produto"
+    ></textarea>
+
+    <div class="botoes-form">
+      <button class="btn-salvar" (click)="salvarProduto()">
+        {{ editando ? 'Salvar alterações' : 'Adicionar produto' }}
+      </button>
+      <button class="btn-cancelar" *ngIf="editando" (click)="cancelarEdicao()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de produtos cadastrados -->
+  <div class="lista-produtos">
+    <h2>Produtos cadastrados ({{ produtos.length }})</h2>
+
+    <p class="vazio" *ngIf="produtos.length === 0">
+      Nenhum produto cadastrado ainda.
+    </p>
+
+    <table *ngIf="produtos.length > 0">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Preço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let produto of produtos">
+          <td>{{ produto.nome }}</td>
+          <td>{{ produto.categoria }}</td>
+          <td>R$ {{ produto.preco.toFixed(2) }}</td>
+          <td class="acoes">
+            <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
+            <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

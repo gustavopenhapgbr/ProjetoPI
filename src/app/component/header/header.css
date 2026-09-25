@@ -96,3 +96,15 @@ header {
     width: 17px;
     height: 17px;
 }
+
+.link-admin {
+    font-size: 14px;
+    color: #475569;
+    text-decoration: none;
+    margin-left: 15px;
+    white-space: nowrap;
+}
+
+.link-admin:hover {
+    color: #0055b8;
+}
