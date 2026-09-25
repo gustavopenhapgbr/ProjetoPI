@@ -1,5 +1,7 @@
 <header>
-  <div class="logo">F.CUSTOM</div>
+  <div class="logo">
+    <a routerLink="/home">F.CUSTOM</a>
+  </div>
 
   <div class="pesquisa">
     <input type="text" placeholder="Pesquisar produto">
@@ -12,9 +14,20 @@
       <span>Fale Conosco</span>
     </div>
 
+    <div class="usuario">
+
+      <div class="usuario-link">
+        <span class="icone"><img src="/images/usuario.png" class="icone" alt="Usuário"></span>
+      </div>
+
+      <div class="dropdown">
+        <a routerLink="/login">Entrar</a>
+        <a routerLink="/register">Criar conta</a>
+      </div>
+
+    </div>
+
     <img class="icone" src="/images/carrinho.png" alt="Carrinho">
 
-    <a routerLink="/login"> 
-      <img src="/images/usuario.png" class="icone usuario" alt="Usuário"> </a>
   </div>
 </header>
