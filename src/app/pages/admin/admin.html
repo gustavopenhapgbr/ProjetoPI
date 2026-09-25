@@ -1,0 +1,121 @@
+<section class="login-admin" *ngIf="!logado">
+  <h1>Painel Administrativo</h1>
+  <p>Digite a senha para acessar</p>
+
+  <div class="campo-senha">
+    <input
+      [type]="mostrarSenha ? 'text' : 'password'"
+      [(ngModel)]="senhaDigitada"
+      placeholder="Senha"
+      (keyup.enter)="entrar()"
+    />
+    <button
+      type="button"
+      class="btn-olho"
+      (click)="alternarMostrarSenha()"
+      [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'"
+    >
+      <svg *ngIf="mostrarSenha" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+      <svg *ngIf="!mostrarSenha" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 5.06-5.94M9.9 4.24A10.9 10.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+        <line x1="1" y1="1" x2="23" y2="23" />
+      </svg>
+    </button>
+  </div>
+  <button (click)="entrar()">Entrar</button>
+
+
+</section>
+
+<section class="painel-admin" *ngIf="logado">
+  <div class="topo-admin">
+    <h1>Painel Administrativo</h1>
+    <button class="btn-sair" (click)="sair()">Sair</button>
+  </div>
+
+  <div class="form-produto">
+    <h2>{{ editando ? 'Editar produto' : 'Adicionar produto' }}</h2>
+
+    <label for="nome">Nome do produto</label>
+    <input
+      id="nome"
+      type="text"
+      [(ngModel)]="produtoEmEdicao.nome"
+      placeholder="Ex: Camiseta Preta"
+    />
+
+    <label for="preco">Preço (R$)</label>
+    <input
+      id="preco"
+      type="number"
+      min="0"
+      step="0.01"
+      [(ngModel)]="produtoEmEdicao.preco"
+      placeholder="Ex: 79.90"
+    />
+
+    <label for="categoria">Categoria</label>
+    <select id="categoria" [(ngModel)]="produtoEmEdicao.categoria">
+      <option *ngFor="let categoria of categorias" [value]="categoria">
+        {{ categoria }}
+      </option>
+    </select>
+
+    <label for="imagem">URL da imagem</label>
+    <input
+      id="imagem"
+      type="text"
+      [(ngModel)]="produtoEmEdicao.imagem"
+      placeholder="/images/produto.png"
+    />
+
+    <label for="descricao">Descrição</label>
+    <textarea
+      id="descricao"
+      [(ngModel)]="produtoEmEdicao.descricao"
+      placeholder="Descrição do produto"
+    ></textarea>
+
+    <div class="botoes-form">
+      <button class="btn-salvar" (click)="salvarProduto()">
+        {{ editando ? 'Salvar alterações' : 'Adicionar produto' }}
+      </button>
+      <button class="btn-cancelar" *ngIf="editando" (click)="cancelarEdicao()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div class="lista-produtos">
+    <h2>Produtos cadastrados ({{ produtos.length }})</h2>
+
+    <p class="vazio" *ngIf="produtos.length === 0">
+      Nenhum produto cadastrado ainda.
+    </p>
+
+    <table *ngIf="produtos.length > 0">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Preço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let produto of produtos">
+          <td>{{ produto.nome }}</td>
+          <td>{{ produto.categoria }}</td>
+          <td>R$ {{ produto.preco.toFixed(2) }}</td>
+          <td class="acoes">
+            <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
+            <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

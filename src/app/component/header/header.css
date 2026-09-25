@@ -162,3 +162,15 @@ header {
 .usuario:hover .dropdown{
     display: block;
 }
+
+.link-admin {
+    font-size: 14px;
+    color: #475569;
+    text-decoration: none;
+    margin-left: 15px;
+    white-space: nowrap;
+}
+
+.link-admin:hover {
+    color: #0055b8;
+}
