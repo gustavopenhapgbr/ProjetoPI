@@ -10,4 +10,17 @@ import { Depoimentos } from '../../component/depoimentos/depoimentos';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {}
+export class Home {
+  
+   peças= [
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""},
+    {nome: "camisa", preço: ""}
+  ]
+}
