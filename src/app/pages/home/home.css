@@ -33,7 +33,6 @@
     width: 100%;
     height: 300px;
     border-radius: .2em;
-    border: 2px solid #ddd;
     text-align: center;
     align-content: center;
     border-radius: 12px;
@@ -74,44 +73,26 @@
 
 .grade {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    padding: 10px;
-    background-color: #ddd;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
 }
 
 .container {
-    padding: 20px;
-}
-
-.item {
-    border: 2px solid white;
-    border-radius: 12px;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.item img {
     width: 100%;
-    height: 160px;
-    object-fit: cover;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.item .info {
-    display: flex;
-    justify-content: space-between; /* nome na esquerda, valor na direita */
-    align-items: center;
-    padding: 8px 10px;
-    background-color: purple;
-    font-size: 0.9rem;
+@media (max-width: 900px) {
+    .grade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
-.item .nome {
-    font-weight: bold;
-}
-
-.item .valor {
-    color: rgb(0, 56, 0);
+@media (max-width: 600px) {
+    .grade {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,0 +1,29 @@
+<article class="card">
+  <div class="visual">
+    @if (produto().imagem) {
+      <img class="imagem" [src]="produto().imagem" [alt]="produto().nome" />
+    } @else {
+      <div class="imagem-placeholder" aria-hidden="true">Sem imagem</div>
+    }
+
+  </div>
+
+  <div class="conteudo">
+    <div class="linha-superior">
+      <span class="etiqueta">{{ produto().categoria }}</span>
+      <span class="avaliacao" aria-label="Avaliação 4.9 de 5">&#9733; 4.9</span>
+    </div>
+    <h2 class="nome">{{ produto().nome }}</h2>
+    <p class="descricao">{{ produto().descricao }}</p>
+
+    <div class="precos">
+      <strong class="preco">{{ produto().preco | currency: 'BRL' }}</strong>
+      <span class="preco-antigo">{{ produto().preco * 1.1 | currency: 'BRL' }}</span>
+      <span class="desconto">10% off</span>
+    </div>
+
+    <button class="comprar" type="button">
+      Comprar agora
+    </button>
+  </div>
+</article>

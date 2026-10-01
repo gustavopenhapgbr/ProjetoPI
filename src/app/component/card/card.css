@@ -1,0 +1,139 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.card {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #dedede;
+  border-radius: 18px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 8%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgb(0 0 0 / 14%);
+}
+
+.imagem,
+.imagem-placeholder {
+  width: 100%;
+  height: 220px;
+  flex-shrink: 0;
+}
+
+.visual {
+  position: relative;
+  background-color: #dedede;
+}
+
+.imagem {
+  object-fit: cover;
+}
+
+.imagem-placeholder {
+  display: grid;
+  place-items: center;
+  background-color: #e8e8e8;
+  color: #666;
+}
+
+.conteudo {
+  flex: 1;
+  padding: 20px 20px 22px;
+}
+
+.linha-superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.etiqueta {
+  padding: 7px 14px;
+  border-radius: 5px;
+  background-color: #0878ff;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.avaliacao {
+  color: #222;
+  font-size: 1rem;
+}
+
+.nome {
+  margin: 22px 0 8px;
+  color: #202020;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.descricao {
+  min-height: 24px;
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.precos {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.preco {
+  color: #202020;
+  font-size: 1.65rem;
+  white-space: nowrap;
+}
+
+.preco-antigo {
+  color: #777;
+  font-size: 0.95rem;
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.desconto {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.comprar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  margin-top: 24px;
+  border: 0;
+  border-radius: 10px;
+  background-color: #0878ff;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.comprar:hover {
+  background-color: #0564d8;
+}
+
+@media (max-width: 600px) {
+  .imagem,
+  .imagem-placeholder {
+    height: 190px;
+  }
+}
