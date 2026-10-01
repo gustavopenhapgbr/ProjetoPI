@@ -1,0 +1,58 @@
+<main class="pagina-produto">
+  @if (produto; as item) {
+    <section class="detalhe-produto" aria-labelledby="produto-titulo">
+      <a class="voltar" routerLink="/">← Voltar para a loja</a>
+
+      <div class="conteudo-produto">
+        <div class="galeria">
+          <div class="imagem-principal">
+            @if (item.imagem) {
+              <img [src]="item.imagem" [alt]="item.nome" />
+            } @else {
+              <span class="sem-imagem">Sem imagem</span>
+            }
+          </div>
+        </div>
+
+        <aside class="informacoes">
+          <p class="categoria">{{ item.categoria }}</p>
+          <h1 id="produto-titulo">{{ item.nome }}</h1>
+          <p class="preco">{{ item.preco | currency: 'BRL' }}</p>
+          <p class="avaliacao" aria-label="Avaliação 4.9 de 5">★ 4.9</p>
+          <p class="estoque">Disponibilidade: <strong>Em estoque</strong></p>
+
+          <div class="seletor-tamanho" aria-label="Escolha o tamanho">
+            <span class="tamanho-label">Tamanho</span>
+            <button type="button" class="tamanho">S</button>
+            <button type="button" class="tamanho selecionado" aria-pressed="true">M</button>
+            <button type="button" class="tamanho">L</button>
+            <button type="button" class="tamanho">XL</button>
+          </div>
+
+          <button type="button" class="adicionar">Adicionar ao carrinho <span>+</span></button>
+
+          <div class="detalhes">
+            <details open>
+              <summary>Descrição <span>+</span></summary>
+              <p>{{ item.descricao || 'Produto exclusivo F.CUSTOM com acabamento premium.' }}</p>
+            </details>
+            <details>
+              <summary>Tabela de medidas <span>+</span></summary>
+              <p>Consulte nossa equipe para encontrar o tamanho ideal.</p>
+            </details>
+            <details>
+              <summary>Informações do produto <span>+</span></summary>
+              <p>Design urbano, confortável e pensado para o seu estilo.</p>
+            </details>
+          </div>
+        </aside>
+      </div>
+    </section>
+  } @else {
+    <section class="detalhe-produto estado-vazio">
+      <p>Produto não encontrado.</p>
+      <a class="botao-voltar" routerLink="/">Voltar para a loja</a>
+    </section>
+  }
+
+</main>
