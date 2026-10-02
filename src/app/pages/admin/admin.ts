@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth';
 import { ProdutoService, Produto } from '../../services/produto/produto';
 
 @Component({
@@ -9,36 +11,26 @@ import { ProdutoService, Produto } from '../../services/produto/produto';
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })
-export class Admin {
-  logado = false;
-  senhaDigitada = '';
-  mostrarSenha = false;
-  private readonly senhaCorreta = 'fcustom123'; 
-
+export class Admin implements OnInit {
   produtos: Produto[] = [];
   categorias = ['camisetas', 'calcas', 'shorts', 'conjuntos', 'acessorios'];
 
   produtoEmEdicao: Produto = this.produtoVazio();
   editando = false;
 
-  constructor(private produtoService: ProdutoService) {}
+  constructor(
+    private produtoService: ProdutoService,
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
-  entrar(): void {
-    if (this.senhaDigitada === this.senhaCorreta) {
-      this.logado = true;
-      this.carregarProdutos();
-    } else {
-      alert('Senha incorreta!');
-    }
-  }
-
-  alternarMostrarSenha(): void {
-    this.mostrarSenha = !this.mostrarSenha;
+  ngOnInit(): void {
+    this.carregarProdutos();
   }
 
   sair(): void {
-    this.logado = false;
-    this.senhaDigitada = '';
+    this.auth.sair();
+    this.router.navigate(['/']);
   }
 
   carregarProdutos(): void {

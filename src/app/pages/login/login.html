@@ -1,5 +1,5 @@
 <div class="content-container">
-  <form>
+  <form (ngSubmit)="entrar()">
     <img src="images/guaxinim.png" alt="F.CUSTOM" class="mascote">
 
     <h1>Bem-vindo</h1>
@@ -7,16 +7,14 @@
 
     <label for="email">E-mail</label>
     <input class="input-simples" id="email" name="email"
-      type="email" placeholder="" />
+      type="email" placeholder="" [(ngModel)]="email" />
 
     <div class="linha-senha">
       <label for="input-senha">Senha</label>
-
-      <!-- esqueceu a senha fazer  pagina -->
       <a routerLink="/forgot-password" class="link">Esqueceu a senha?</a>
     </div>
     <input class="input-simples" id="input-senha" name="input-senha"
-      type="password" placeholder="" />
+      type="password" placeholder="" [(ngModel)]="senha" />
 
     <button type="submit" class="input-submeter">Entrar</button>
 

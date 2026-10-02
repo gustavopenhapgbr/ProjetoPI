@@ -21,16 +21,17 @@
       </div>
 
       <div class="dropdown">
-        <a routerLink="/login">Entrar</a>
-        <a routerLink="/register">Criar conta</a>
-        <a routerLink="/admin">Admin</a>
+        @if (auth.isAdmin()) {
+          <a routerLink="/admin">Painel Admin</a>
+          <a href="#" (click)="sair(); $event.preventDefault()">Sair</a>
+        } @else {
+          <a routerLink="/login">Entrar</a>
+          <a routerLink="/register">Criar conta</a>
+        }
       </div>
 
     </div>
 
     <img class="icone" src="/images/carrinho.png" alt="Carrinho">
-
-    <a routerLink="/login"> 
-      <img src="/images/usuario.png" class="icone usuario" alt="Usuário"> </a>
   </div>
 </header>
