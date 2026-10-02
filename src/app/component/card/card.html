@@ -1,9 +1,9 @@
 <article class="card">
   <div class="visual">
     @if (produto().imagem) {
-      <img class="imagem" [src]="produto().imagem" [alt]="produto().nome" />
+    <img class="imagem" [src]="'/images/' + produto().imagem" [alt]="produto().nome" />
     } @else {
-      <div class="imagem-placeholder" aria-hidden="true">Sem imagem</div>
+    <div class="imagem-placeholder" aria-hidden="true">Sem imagem</div>
     }
 
   </div>

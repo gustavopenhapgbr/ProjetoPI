@@ -16,13 +16,31 @@ import { Router } from '@angular/router';
 export class Home {
   produtos: any[] = [];
 
-  constructor(private router:  Router){}
+  exemplos: any[] = [
+    { id: 'ex1', nome: 'Camiseta Básica', preco: 79.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex2', nome: 'Camiseta Preta', preco: 89.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex3', nome: 'Camiseta Branca', preco: 69.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex4', nome: 'Camiseta Oversized', preco: 99.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex5', nome: 'Camiseta Estampada', preco: 109.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex6', nome: 'Camiseta Polo', preco: 119.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex7', nome: 'Camiseta Regata', preco: 59.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex8', nome: 'Camiseta Manga Longa', preco: 129.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex9', nome: 'Camiseta Premium', preco: 149.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex10', nome: 'Camiseta Regata', preco: 59.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex11', nome: 'Camiseta Manga Longa', preco: 129.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+    { id: 'ex12', nome: 'Camiseta Premium', preco: 149.9, categoria: 'camisetas', imagem: 'camiseta.png', descricao: '' },
+  ];
+
+  constructor(private router: Router) {}
+
   ngOnInit(): void {
-    this.produtos = JSON.parse(localStorage.getItem('fcustom_produtos') || '[]');
+    const doAdmin: any[] = JSON.parse(localStorage.getItem('fcustom_produtos') || '[]');
+    const faltam = Math.max(0, 12 - doAdmin.length);
+    this.produtos = [...doAdmin, ...this.exemplos.slice(0, faltam)];
   }
 
-  irPageProduto(produto: any){
-    this.router.navigate(['/produto', produto.id])
+  irPageProduto(produto: any) {
+    if (String(produto.id).startsWith('ex')) return;
+    this.router.navigate(['/produto', produto.id]);
   }
-
 }
