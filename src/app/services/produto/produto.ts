@@ -7,6 +7,7 @@ export interface Produto {
   categoria: string;
   imagem: string;
   descricao: string;
+  destaque: boolean;
 }
 
 @Injectable({
@@ -17,22 +18,64 @@ export class ProdutoService {
 
   listar(): Produto[] {
     const dados = localStorage.getItem(this.chave);
-    return dados ? JSON.parse(dados) : [];
+    if (!dados) {
+      return [];
+    }
+
+    const produtos = JSON.parse(dados) as Partial<Produto>[];
+    const categoriasComDestaque = new Set<string>();
+
+    return produtos.map((produto) => {
+      const destaque =
+        produto.destaque === true && !categoriasComDestaque.has(produto.categoria ?? '');
+
+      if (destaque) {
+        categoriasComDestaque.add(produto.categoria ?? '');
+      }
+
+      return {
+      id: produto.id ?? 0,
+      nome: produto.nome ?? '',
+      preco: produto.preco ?? 0,
+      categoria: produto.categoria ?? '',
+      imagem: produto.imagem ?? '',
+      descricao: produto.descricao ?? '',
+        destaque,
+      };
+    });
   }
 
   adicionar(produto: Omit<Produto, 'id'>): void {
     const produtos = this.listar();
     const novoId = produtos.length > 0 ? Math.max(...produtos.map((p) => p.id)) + 1 : 1;
-    produtos.push({ id: novoId, ...produto });
-    this.salvarLista(produtos);
+    const produtoComId = { id: novoId, ...produto };
+    const produtosAtualizados = produtoComId.destaque
+      ? produtos.map((item) =>
+          item.categoria === produtoComId.categoria ? { ...item, destaque: false } : item,
+        )
+      : produtos;
+
+    produtosAtualizados.push(produtoComId);
+    this.salvarLista(produtosAtualizados);
   }
 
   atualizar(produtoAtualizado: Produto): void {
     const produtos = this.listar();
     const indice = produtos.findIndex((p) => p.id === produtoAtualizado.id);
     if (indice !== -1) {
-      produtos[indice] = produtoAtualizado;
-      this.salvarLista(produtos);
+      const produtosAtualizados = produtos.map((produto) => {
+        if (
+          produto.id !== produtoAtualizado.id &&
+          produto.categoria === produtoAtualizado.categoria &&
+          produtoAtualizado.destaque
+        ) {
+          return { ...produto, destaque: false };
+        }
+
+        return produto.id === produtoAtualizado.id ? produtoAtualizado : produto;
+      });
+
+      this.salvarLista(produtosAtualizados);
     }
   }
 

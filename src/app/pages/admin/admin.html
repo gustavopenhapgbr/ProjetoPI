@@ -32,12 +32,19 @@
       </option>
     </select>
 
-    <label for="imagem">URL da imagem</label>
+    <label for="imagem">Arquivo da imagem</label>
     <input
       id="imagem"
-      type="text"
-      [(ngModel)]="produtoEmEdicao.imagem"
-      placeholder="/images/produto.png"
+      type="file"
+      accept="image/png, image/jpeg, image/webp"
+      (change)="onImagemSelecionada($event)"
+    />
+
+    <img
+      *ngIf="produtoEmEdicao.imagem"
+      [src]="produtoEmEdicao.imagem"
+      [alt]="produtoEmEdicao.nome || 'Preview da imagem do produto'"
+      class="imagem-preview"
     />
 
     <label for="descricao">Descrição</label>
@@ -46,6 +53,14 @@
       [(ngModel)]="produtoEmEdicao.descricao"
       placeholder="Descrição do produto"
     ></textarea>
+
+    <label class="campo-destaque">
+      <input
+        type="checkbox"
+        [(ngModel)]="produtoEmEdicao.destaque"
+      />
+      Produto em destaque nesta categoria
+    </label>
 
     <div class="botoes-form">
       <button class="btn-salvar" (click)="salvarProduto()">
@@ -70,6 +85,7 @@
           <th>Nome</th>
           <th>Categoria</th>
           <th>Preço</th>
+          <th>Destaque</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -78,6 +94,7 @@
           <td>{{ produto.nome }}</td>
           <td>{{ produto.categoria }}</td>
           <td>R$ {{ produto.preco.toFixed(2) }}</td>
+          <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
           <td class="acoes">
             <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
             <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>

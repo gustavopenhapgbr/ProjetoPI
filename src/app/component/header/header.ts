@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth/auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,10 +8,4 @@ import { AuthService } from '../../services/auth/auth';
   styleUrl: './header.css',
 })
 export class Header {
-  constructor(protected auth: AuthService, private router: Router) {}
-
-  sair(): void {
-    this.auth.sair();
-    this.router.navigate(['/']);
-  }
 }

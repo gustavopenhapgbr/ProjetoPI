@@ -38,7 +38,38 @@ export class Admin implements OnInit {
   }
 
   produtoVazio(): Produto {
-    return { id: 0, nome: '', preco: 0, categoria: 'camisetas', imagem: '', descricao: '' };
+    return {
+      id: 0,
+      nome: '',
+      preco: 0,
+      categoria: 'camisetas',
+      imagem: '',
+      descricao: '',
+      destaque: false,
+    };
+  }
+
+  onImagemSelecionada(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const arquivo = input.files?.[0];
+
+    if (!arquivo) {
+      this.produtoEmEdicao.imagem = '';
+      return;
+    }
+
+    if (!arquivo.type.startsWith('image/')) {
+      alert('Selecione uma imagem válida (PNG, JPG ou WEBP).');
+      input.value = '';
+      this.produtoEmEdicao.imagem = '';
+      return;
+    }
+
+    const leitor = new FileReader();
+    leitor.onload = () => {
+      this.produtoEmEdicao.imagem = typeof leitor.result === 'string' ? leitor.result : '';
+    };
+    leitor.readAsDataURL(arquivo);
   }
 
   salvarProduto(): void {

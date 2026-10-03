@@ -1,4 +1,18 @@
 <section class="pagina-categoria">
-  <h1>Acessórios</h1>
-  <p>Em breve os produtos desta categoria.</p>
+  <div class="trilha"><a routerLink="/">Início</a><span>/</span><strong>Acessórios</strong></div>
+  <div class="cabecalho-categoria">
+    <span class="eyebrow">Coleção F.CUSTOM</span>
+    <h1>Acessórios</h1>
+    <p>Detalhes que completam o seu estilo.</p>
+  </div>
+  @if (produtos.length > 0) {
+    <div class="barra-categoria"><span>{{ produtos.length }} produto{{ produtos.length === 1 ? '' : 's' }}</span><span class="linha"></span></div>
+    <div class="grade">
+      @for (produto of produtos; track produto.id) {
+        <app-card (click)="irParaOproduto(produto)" [produto]="produto"></app-card>
+      }
+    </div>
+  } @else {
+    <p>Nenhum produto cadastrado nesta categoria.</p>
+  }
 </section>

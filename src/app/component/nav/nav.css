@@ -19,4 +19,10 @@ nav a {
 
     font-size: 13px;
     font-weight: bold;
+    transition: 100ms;
+}
+
+nav a:hover{
+    transform: scale(1.10);
+    text-decoration: underline;
 }
