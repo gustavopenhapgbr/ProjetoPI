@@ -37,13 +37,8 @@
       </div>
 
       <div class="dropdown">
-        @if (auth.isAdmin()) {
-          <a routerLink="/admin">Painel Admin</a>
-          <a href="#" (click)="sair(); $event.preventDefault()">Sair</a>
-        } @else {
-          <a routerLink="/login">Entrar</a>
-          <a routerLink="/register">Criar conta</a>
-        }
+        <a routerLink="/login">Entrar</a>
+        <a routerLink="/register">Criar conta</a>
       </div>
 
     </div>

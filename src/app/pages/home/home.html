@@ -22,14 +22,18 @@
     </div>
 </div>
 
-<h1 class="titulo">Produtos Disponiveis</h1>
+<h1 class="titulo">Produtos em destaque</h1>
 
-<div class="container">
+<div class="container" *ngIf="produtosDestaque.length > 0">
     <div class="grade">
-        @for (produto of produtos; track produto.id) {
+        @for (produto of produtosDestaque; track produto.id) {
             <app-card (click)="irPageProduto(produto)" [produto]="produto"></app-card>
         }
     </div>
 </div>
+
+<p class="sem-produtos" *ngIf="produtosDestaque.length === 0">
+    Nenhum produto em destaque no momento.
+</p>
 
 <app-depoimentos></app-depoimentos>

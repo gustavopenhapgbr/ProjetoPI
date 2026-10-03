@@ -122,6 +122,27 @@
   resize: vertical;
 }
 
+.campo-destaque {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  font-weight: normal !important;
+}
+
+.campo-destaque input {
+  width: auto;
+}
+
+.imagem-preview {
+  display: block;
+  max-width: 180px;
+  max-height: 180px;
+  margin-top: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 .botoes-form {
   margin-top: 18px;
   display: flex;
