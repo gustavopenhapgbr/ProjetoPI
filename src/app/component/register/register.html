@@ -1,27 +1,46 @@
 <div class="content-container">
-  <form>
+  <form #f="ngForm" (ngSubmit)="cadastrar(f)">
     <img src="images/guaxinim.png" alt="F.CUSTOM" class="mascote">
 
-    <h1>Bem-vindo</h1>
-    <p>Entre para continuar comprando</p>
+    <h1>Crie sua conta</h1>
+    <p>Cadastre-se para começar a comprar</p>
 
     <label for="email">E-mail</label>
-    <input class="input-simples" id="email" name="email"
-      type="email" placeholder="" />
+    <input class="input-simples" id="email" name="email" type="email"
+      ngModel required email pattern="[^@\s]+@[^@\s]+\.[^@\s]+" #email="ngModel" />
 
-    <div class="linha-senha">
-      <label for="input-senha">Senha</label>
-    </div>
-    <input class="input-simples" id="input-senha" name="input-senha"
-      type="password" placeholder="" />
-    
-    <div class="linha-senha">
-        <label for="input-senha">Confirmar senha</label>
-    </div>
-    <input class="input-simples" id="input-senha" name="input-senha"
-      type="password" placeholder="" />
+    @if (email.touched || f.submitted) {
+      @if (email.errors?.['required']) {
+        <span class="erro">Digite seu e-mail.</span>
+      } @else if (email.errors?.['email'] || email.errors?.['pattern']) {
+        <span class="erro">Digite um e-mail válido.</span>
+      }
+    }
+
+    <label for="senha">Senha</label>
+    <input class="input-simples" id="senha" name="senha" type="password"
+      ngModel required minlength="6" #senha="ngModel" />
+
+    @if (senha.touched || f.submitted) {
+      @if (senha.errors?.['required']) {
+        <span class="erro">Digite uma senha.</span>
+      } @else if (senha.errors?.['minlength']) {
+        <span class="erro">A senha precisa ter pelo menos 6 caracteres.</span>
+      }
+    }
+
+    <label for="confirmar-senha">Confirmar senha</label>
+    <input class="input-simples" id="confirmar-senha" name="confirmarSenha" type="password"
+      ngModel required #confirmar="ngModel" />
+
+    @if (confirmar.touched || f.submitted) {
+      @if (confirmar.errors?.['required']) {
+        <span class="erro">Confirme sua senha.</span>
+      } @else if (confirmar.value !== senha.value) {
+        <span class="erro">As senhas não são iguais.</span>
+      }
+    }
 
     <button type="submit" class="input-submeter">Cadastrar</button>
-
   </form>
 </div>
