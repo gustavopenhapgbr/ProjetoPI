@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+
 export interface Produto {
   id: number;
   nome: string;
@@ -18,6 +19,19 @@ export class ProdutoService {
   listar(): Produto[] {
     const dados = localStorage.getItem(this.chave);
     return dados ? JSON.parse(dados) : [];
+  }
+
+    buscar(termo: string, limite?: number): Produto[] {
+    const normaliza = (s: string) =>
+      s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+    const t = normaliza(termo.trim());
+    if (!t) return [];
+
+    const achados = this.listar().filter(
+      (p) => normaliza(p.nome).includes(t) || normaliza(p.categoria).includes(t)
+    );
+    return limite ? achados.slice(0, limite) : achados;
   }
 
   adicionar(produto: Omit<Produto, 'id'>): void {

@@ -1,0 +1,19 @@
+<section class="pesquisa-pagina">
+  <h2>Resultados para "{{ termo() }}"</h2>
+
+  @if (resultados().length) {
+    <div class="lista">
+      @for (p of resultados(); track p.id) {
+        <a class="link-card" [routerLink]="['/produto', p.id]">
+          <app-card [produto]="p" />
+        </a>
+      }
+    </div>
+  } @else {
+    <div class="nao-encontrado">
+      <p>Produto não encontrado.</p>
+      <span>Não achamos nada para "{{ termo() }}". Tente outra palavra.</span>
+      <a routerLink="/">Voltar para a página inicial</a>
+    </div>
+  }
+</section>

@@ -9,6 +9,7 @@ import { Login } from './pages/login/login';
 import { Admin } from './pages/admin/admin';
 import { adminGuard } from './services/auth/admin-guard';
 import { PaginaProduto } from './pages/pagina-produto/pagina-produto';
+import { Pesquisa } from './pages/pesquisa/pesquisa';
 
 export const routes: Routes = [
     {path:'', component:Home},
@@ -19,5 +20,6 @@ export const routes: Routes = [
     {path:'acessorios', component:Acessorios},
     {path: 'login', component:Login},
     {path: 'admin', component:Admin, canActivate: [adminGuard]},
-    {path: 'produto/:id', component: PaginaProduto}
+    {path: 'produto/:id', component: PaginaProduto},
+    { path: 'pesquisa', component: Pesquisa }, 
 ];

@@ -1,0 +1,37 @@
+.pesquisa-pagina {
+  padding: 30px 25px;
+}
+
+.lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.link-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.nao-encontrado {
+  margin-top: 40px;
+  text-align: center;
+  color: #555;
+}
+
+.nao-encontrado p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.nao-encontrado span {
+  display: block;
+  margin: 8px 0 16px;
+}
+
+.nao-encontrado a {
+  color: #0055b8;
+}
