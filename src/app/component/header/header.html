@@ -33,12 +33,26 @@
     <div class="usuario">
 
       <div class="usuario-link">
-        <span class="icone"><img src="/images/usuario.png" class="icone" alt="Usuário"></span>
+        @if (auth.isLogado()) {
+          <a routerLink="/perfil">
+            <img src="/images/usuario.png" class="icone" alt="Usuário">
+          </a>
+        } @else {
+          <img src="/images/usuario.png" class="icone" alt="Usuário">
+        }
       </div>
 
       <div class="dropdown">
-        <a routerLink="/login">Entrar</a>
-        <a routerLink="/register">Criar conta</a>
+        @if (auth.isAdmin()) {
+          <a routerLink="/admin">Painel Admin</a>
+          <a href="#" (click)="sair(); $event.preventDefault()">Sair</a>
+        } @else if (auth.isLogado()) {
+          <a routerLink="/perfil">Meu perfil</a>
+          <a href="#" (click)="sair(); $event.preventDefault()">Sair</a>
+        } @else {
+          <a routerLink="/login">Entrar</a>
+          <a routerLink="/register">Criar conta</a>
+        }
       </div>
 
     </div>

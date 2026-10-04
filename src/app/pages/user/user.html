@@ -1,0 +1,57 @@
+<div class="content-container">
+  <div class="card">
+    <div class="avatar">{{ email.charAt(0).toUpperCase() }}</div>
+
+    <h1>Meu perfil</h1>
+    <p>Dados da sua conta</p>
+
+    <div class="dado">
+      <div class="dado-topo">
+        <span class="rotulo">E-mail</span>
+        @if (!editandoEmail) {
+          <button type="button" class="botao-editar" (click)="editarEmail()">Editar</button>
+        }
+      </div>
+
+      @if (editandoEmail) {
+        <input class="input-simples" type="email" [(ngModel)]="novoEmail" />
+        @if (erroEmail) {
+          <span class="erro">{{ erroEmail }}</span>
+        }
+        <div class="acoes">
+          <button type="button" class="botao-salvar" (click)="salvarEmail()">Salvar</button>
+          <button type="button" class="botao-cancelar" (click)="editandoEmail = false">Cancelar</button>
+        </div>
+      } @else {
+        <span class="valor">{{ email }}</span>
+      }
+    </div>
+
+    <div class="dado">
+      <div class="dado-topo">
+        <span class="rotulo">Senha</span>
+        @if (!editandoSenha) {
+          <button type="button" class="botao-editar" (click)="editarSenha()">Editar</button>
+        }
+      </div>
+
+      @if (editandoSenha) {
+        <input class="input-simples" type="password" placeholder="Nova senha" [(ngModel)]="novaSenha" />
+        @if (erroSenha) {
+          <span class="erro">{{ erroSenha }}</span>
+        }
+        <div class="acoes">
+          <button type="button" class="botao-salvar" (click)="salvarSenha()">Salvar</button>
+          <button type="button" class="botao-cancelar" (click)="editandoSenha = false">Cancelar</button>
+        </div>
+      } @else {
+        <span class="valor">••••••••</span>
+      }
+    </div>
+
+    <button type="button" class="botao-sair" (click)="sair()">Sair da conta</button>
+    <button type="button" class="botao-excluir" (click)="excluirConta()">Excluir minha conta</button>
+
+    <a routerLink="/" class="link">Voltar para a loja</a>
+  </div>
+</div>
