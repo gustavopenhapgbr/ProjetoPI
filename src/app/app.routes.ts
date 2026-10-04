@@ -9,6 +9,7 @@ import { Login } from './pages/login/login';
 import { Admin } from './pages/admin/admin';
 import { adminGuard } from './services/auth/admin-guard';
 import { PaginaProduto } from './pages/pagina-produto/pagina-produto';
+import { Pesquisa } from './pages/pesquisa/pesquisa';
 import { Register } from './component/register/register';
 import { ForgotPassword } from './component/forgot-password/forgot-password';
 import { User } from './pages/user/user';
@@ -25,5 +26,6 @@ export const routes: Routes = [
     {path: 'forgot-password', component:ForgotPassword},
     {path: 'perfil', component:User},
     {path: 'admin', component:Admin, canActivate: [adminGuard]},
-    {path: 'produto/:id', component: PaginaProduto}
+    {path: 'produto/:id', component: PaginaProduto},
+    { path: 'pesquisa', component: Pesquisa }, 
 ];
