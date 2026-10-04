@@ -6,13 +6,13 @@
     animation: spin 25s infinite linear;
     padding-right: 1em;
     height: 325px;
-    background-color: #ddd;
+    background-color: #423a3a;
 }
 
 .titulo1 {
     margin-top: 50px;
     font-family: arial;
-    color: rgb(85, 2, 163);
+    color: rgb(117, 33, 173);
     text-align: center;
 
 }
@@ -38,7 +38,7 @@
     border-radius: 10px;
     text-align: center;
     align-content: center;
-    background-color: white;
+    background-color: rgb(33, 31, 31);
 
 }
 
@@ -66,7 +66,7 @@
 
 .titulo {
     font-family: arial;
-    color: rgb(85, 2, 163);
+    color: rgb(66, 20, 109);
     text-align: center;
     margin-bottom: 30px;
 }

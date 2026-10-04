@@ -5,7 +5,7 @@
 .pagina-produto {
   min-height: 600px;
   padding: 38px clamp(20px, 5vw, 80px) 72px;
-  background: #f8fafc;
+  background: #404449;
 }
 
 .detalhe-produto {

@@ -1,12 +1,12 @@
 .faixa {
     height: 38px;
-    background-color: #0878ff;
+    background-color:  #36454F;
     display: flex;
     align-items: center;
     justify-content: space-around;
     position: relative;
     overflow: visible;
-    color: white;
+    color: rgb(255, 255, 255);
     font-size: 9px;
     font-weight: bold;
 }
