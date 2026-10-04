@@ -1,20 +1,20 @@
-.grupo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-    animation: spin 25s infinite linear;
-    padding-right: 1em;
-    height: 325px;
-    background-color: #423a3a;
-}
-
 .titulo1 {
     margin-top: 50px;
     font-family: arial;
     color: rgb(117, 33, 173);
     text-align: center;
 
+}
+
+.grupo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    animation: spin 20s infinite linear;
+    padding-right: 1em;
+    height: 325px;
+    background-color: #423a3a;
 }
 
 .lateral {
