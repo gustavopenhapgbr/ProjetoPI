@@ -10,7 +10,7 @@ form {
   padding: 32px 28px;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #777;
   border: 1px solid #eee;
   border-radius: 14px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
@@ -26,12 +26,12 @@ form h1 {
   font-size: 22px;
   margin: 0;
   text-align: center;
-  color: #111;
+  color: #eee;
 }
 
 form p {
   font-size: 14px;
-  color: #777;
+  color: #eee;
   text-align: center;
   margin: 6px 0 24px;
 }
@@ -39,7 +39,7 @@ form p {
 form label {
   font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: #eee;
   margin-bottom: 6px;
 }
 
@@ -55,10 +55,10 @@ form label {
   outline: none;
   transition: border-color .2s, box-shadow .2s;
 }
-
+/* sombra de quando seleciona o botão para escrever o login e senha*/
 .input-simples:focus {
-  border-color: #0878ff;
-  box-shadow: 0 0 0 3px rgba(8, 120, 255, .15);
+  border-color: #42146d;
+  box-shadow: 0 0 0 3px rgba(66, 20, 109);
 }
 
 .linha-senha {
@@ -73,26 +73,27 @@ form label {
   font-size: 15px;
   font-weight: 600;
   color: #fff;
-  background-color: #0878ff;
+  /*botão de entrar cor*/
+  background-color: #42146d;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color .2s, transform .1s;
 }
-
-.input-submeter:hover  { background-color: #0062d6; }
+/*quando passamos o cursor em cima troca de cor do botão entar*/
+.input-submeter:hover  { background-color: #a740eb; }
 .input-submeter:active { transform: scale(.98); }
 
 .link {
   font-size: 12px;
-  color: #0878ff;
+  color: #fff;
   text-decoration: none;
   font-weight: 600;
 }
 
 .cadastro {
   font-size: 13px;
-  color: #666;
+  color: #fff;
   text-align: center;
   margin-top: 20px;
 }

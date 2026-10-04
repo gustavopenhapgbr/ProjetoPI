@@ -1,5 +1,5 @@
 :host {
-    background-color: #0878ff;
+    background-color: #42146d;
     color: white;
     padding: 50px 8%;
     display: flex;
@@ -106,7 +106,7 @@
 }
 
 .newsletter-form button {
-    background-color: #1ed760;
+    background-color: rgb(214, 212, 201);
     color: black;
     border: none;
     padding: 0 20px;
