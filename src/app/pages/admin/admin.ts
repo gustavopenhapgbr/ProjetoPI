@@ -5,6 +5,15 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth';
 import { ProdutoService, Produto } from '../../services/produto/produto';
 
+export interface GrupoCategoria {
+  categoria: string;
+  quantidade: number;
+  precoMin: number;
+  precoMax: number;
+  emDestaque: string;
+  produtos: Produto[];
+}
+
 @Component({
   selector: 'app-admin',
   imports: [CommonModule, FormsModule],
@@ -13,6 +22,8 @@ import { ProdutoService, Produto } from '../../services/produto/produto';
 })
 export class Admin implements OnInit {
   produtos: Produto[] = [];
+  grupos: GrupoCategoria[] = [];
+  categoriasAbertas = new Set<string>();
   categorias = ['camisetas', 'calcas', 'shorts', 'conjuntos', 'acessorios'];
 
   produtoEmEdicao: Produto = this.produtoVazio();
@@ -35,6 +46,42 @@ export class Admin implements OnInit {
 
   carregarProdutos(): void {
     this.produtos = this.produtoService.listar();
+    this.agruparPorCategoria();
+  }
+
+  private agruparPorCategoria(): void {
+    const mapa = new Map<string, Produto[]>();
+    for (const produto of this.produtos) {
+      const lista = mapa.get(produto.categoria) ?? [];
+      lista.push(produto);
+      mapa.set(produto.categoria, lista);
+    }
+
+    this.grupos = Array.from(mapa, ([categoria, produtos]) => {
+      const precos = produtos.map((p) => p.preco);
+      return {
+        categoria,
+        quantidade: produtos.length,
+        precoMin: Math.min(...precos),
+        precoMax: Math.max(...precos),
+        emDestaque: produtos.find((p) => p.destaque)?.nome ?? '—',
+        produtos,
+      };
+    });
+  }
+
+  alternarCategoria(categoria: string): void {
+    if (this.categoriasAbertas.has(categoria)) {
+      this.categoriasAbertas.delete(categoria);
+    } else {
+      this.categoriasAbertas.add(categoria);
+    }
+  }
+
+  formatarPreco(grupo: GrupoCategoria): string {
+    const min = 'R$ ' + grupo.precoMin.toFixed(2);
+    const max = 'R$ ' + grupo.precoMax.toFixed(2);
+    return grupo.precoMin === grupo.precoMax ? min : min + ' – ' + max;
   }
 
   produtoVazio(): Produto {
@@ -100,7 +147,7 @@ export class Admin implements OnInit {
   }
 
   removerProduto(id: number): void {
-    const confirmou = confirm('Tem certeza que deseja remover este produto?');
+    const confirmou = confirm('Deseja remover este produto?');
     if (confirmou) {
       this.produtoService.remover(id);
       this.carregarProdutos();
