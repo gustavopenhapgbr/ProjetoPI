@@ -35,38 +35,47 @@ export class ProdutoService {
       }
 
       return {
-      id: produto.id ?? 0,
-      nome: produto.nome ?? '',
-      preco: produto.preco ?? 0,
-      categoria: produto.categoria ?? '',
-      imagem: produto.imagem ?? '',
-      descricao: produto.descricao ?? '',
+        id: produto.id ?? 0,
+        nome: produto.nome ?? '',
+        preco: produto.preco ?? 0,
+        categoria: produto.categoria ?? '',
+        imagem: produto.imagem ?? '',
+        descricao: produto.descricao ?? '',
         destaque,
       };
     });
   }
 
-    buscar(termo: string, limite?: number): Produto[] {
-    const normaliza = (s: string) =>
-      s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  buscar(termo: string): Produto[] {
+    const busca = termo.trim();
 
-    const t = normaliza(termo.trim());
-    if (!t) return [];
 
-    const achados = this.listar().filter(
-      (p) => normaliza(p.nome).includes(t) || normaliza(p.categoria).includes(t)
-    );
-    return limite ? achados.slice(0, limite) : achados;
+    if (busca === '') {
+      return [];
+    }
+
+    const produtos = this.listar();
+    const encontrados: Produto[] = [];
+
+
+    for (const produto of produtos) {
+
+      if (produto.nome.indexOf(busca) !== -1 || produto.categoria.indexOf(busca) !== -1) {
+        encontrados.push(produto);
+      }
+    }
+
+    return encontrados;
   }
-
+  
   adicionar(produto: Omit<Produto, 'id'>): void {
     const produtos = this.listar();
     const novoId = produtos.length > 0 ? Math.max(...produtos.map((p) => p.id)) + 1 : 1;
     const produtoComId = { id: novoId, ...produto };
     const produtosAtualizados = produtoComId.destaque
       ? produtos.map((item) =>
-          item.categoria === produtoComId.categoria ? { ...item, destaque: false } : item,
-        )
+        item.categoria === produtoComId.categoria ? { ...item, destaque: false } : item,
+      )
       : produtos;
 
     produtosAtualizados.push(produtoComId);

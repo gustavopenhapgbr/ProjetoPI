@@ -20,7 +20,7 @@ export class Header {
 
   sugestoes = computed(() =>
     this.termo().trim().length >= 2
-      ? this.produtoService.buscar(this.termo(), 5)
+      ? this.produtoService.buscar(this.termo())
       : []
   );
 
