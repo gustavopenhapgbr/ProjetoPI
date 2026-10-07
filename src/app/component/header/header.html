@@ -4,9 +4,25 @@
   </div>
 
   <div class="pesquisa">
-    <input type="text" placeholder="Pesquisar produto">
-    <span>⌕</span>
-  </div>
+  <input
+    #campo
+    type="text"
+    placeholder="Pesquisar produto"
+    [value]="termo()"
+    (input)="digitar(campo.value)"
+    (keyup.enter)="pesquisar()"
+    (blur)="aberto.set(false)"
+  >
+  <span (click)="pesquisar()">⌕</span>
+
+  @if (aberto() && sugestoes().length > 0) {
+    <ul class="sugestoes">
+      @for (p of sugestoes(); track p.id) {
+        <li (mousedown)="escolher(p)">{{ p.nome }}</li>
+      }
+    </ul>
+  }
+</div>
 
   <div class="opcoes">
     <div class="fale-conosco">
