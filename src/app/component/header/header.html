@@ -5,19 +5,6 @@
 
   <div class="pesquisa">
   <input
-<<<<<<< Updated upstream
-    type="text"
-    placeholder="Pesquisar produto"
-    [value]="termo()"
-    (input)="digitar($any($event.target).value)"
-    (keydown.enter)="pesquisar()"
-    (keydown.escape)="aberto.set(false)"
-    (blur)="aberto.set(false)"
-  />
-  <span (click)="pesquisar()">⌕</span>
-
-  @if (aberto() && sugestoes().length) {
-=======
     #campo
     type="text"
     placeholder="Pesquisar produto"
@@ -29,7 +16,6 @@
   <span (click)="pesquisar()">⌕</span>
 
   @if (aberto() && sugestoes().length > 0) {
->>>>>>> Stashed changes
     <ul class="sugestoes">
       @for (p of sugestoes(); track p.id) {
         <li (mousedown)="escolher(p)">{{ p.nome }}</li>

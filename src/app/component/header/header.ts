@@ -2,9 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth';
 import { Produto, ProdutoService } from '../../services/produto/produto';
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth/auth';
+
+
 
 @Component({
   selector: 'app-header',
@@ -43,9 +42,6 @@ export class Header {
     this.pesquisar();
   }
 
-  sair(): void {
-  auth = inject(AuthService);
-  private router = inject(Router);
 
   sair() {
     this.auth.sair();
