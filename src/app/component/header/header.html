@@ -1,6 +1,6 @@
 <header>
   <div class="logo">
-    <a routerLink="/">F.CUSTOM</a>
+    <a routerLink="/">F.Company</a>
   </div>
 
   <div class="pesquisa">
@@ -33,26 +33,12 @@
     <div class="usuario">
 
       <div class="usuario-link">
-        @if (auth.isLogado()) {
-          <a routerLink="/perfil">
-            <img src="/images/usuario.png" class="icone" alt="Usuário">
-          </a>
-        } @else {
-          <img src="/images/usuario.png" class="icone" alt="Usuário">
-        }
+        <span class="icone"><img src="/images/usuario.png" class="icone" alt="Usuário"></span>
       </div>
 
       <div class="dropdown">
-        @if (auth.isAdmin()) {
-          <a routerLink="/admin">Painel Admin</a>
-          <a href="#" (click)="sair(); $event.preventDefault()">Sair</a>
-        } @else if (auth.isLogado()) {
-          <a routerLink="/perfil">Meu perfil</a>
-          <a href="#" (click)="sair(); $event.preventDefault()">Sair</a>
-        } @else {
-          <a routerLink="/login">Entrar</a>
-          <a routerLink="/register">Criar conta</a>
-        }
+        <a routerLink="/login">Entrar</a>
+        <a routerLink="/register">Criar conta</a>
       </div>
 
     </div>

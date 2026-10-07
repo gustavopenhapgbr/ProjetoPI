@@ -73,7 +73,7 @@
   </div>
 
   <div class="lista-produtos">
-    <h2>Produtos cadastrados ({{ produtos.length }})</h2>
+    <h2>Produtos cadastrados ({{ produtos.length }} em {{ grupos.length }} categorias)</h2>
 
     <p class="vazio" *ngIf="produtos.length === 0">
       Nenhum produto cadastrado ainda.
@@ -82,24 +82,37 @@
     <table *ngIf="produtos.length > 0">
       <thead>
         <tr>
-          <th>Nome</th>
           <th>Categoria</th>
+          <th>Quantidade</th>
           <th>Preço</th>
           <th>Destaque</th>
           <th>Ações</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let produto of produtos">
-          <td>{{ produto.nome }}</td>
-          <td>{{ produto.categoria }}</td>
-          <td>R$ {{ produto.preco.toFixed(2) }}</td>
-          <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
+      <tbody *ngFor="let grupo of grupos">
+        <tr class="linha-categoria">
+          <td>{{ grupo.categoria }}</td>
+          <td><span class="contagem">{{ grupo.quantidade }}</span></td>
+          <td>{{ formatarPreco(grupo) }}</td>
+          <td>{{ grupo.emDestaque }}</td>
           <td class="acoes">
-            <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
-            <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
+            <button class="btn-detalhes" (click)="alternarCategoria(grupo.categoria)">
+              {{ categoriasAbertas.has(grupo.categoria) ? 'Ocultar' : 'Ver produtos' }}
+            </button>
           </td>
         </tr>
+        <ng-container *ngIf="categoriasAbertas.has(grupo.categoria)">
+          <tr class="linha-produto" *ngFor="let produto of grupo.produtos">
+            <td>↳ {{ produto.nome }}</td>
+            <td>1</td>
+            <td>R$ {{ produto.preco.toFixed(2) }}</td>
+            <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
+            <td class="acoes">
+              <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
+              <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </div>

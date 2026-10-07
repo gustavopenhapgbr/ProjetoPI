@@ -4,7 +4,6 @@ import { AuthService } from '../../services/auth/auth';
 import { Produto, ProdutoService } from '../../services/produto/produto';
 
 
-
 @Component({
   selector: 'app-header',
   imports: [RouterLink],
