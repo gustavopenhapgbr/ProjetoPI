@@ -31,7 +31,7 @@
   padding: 10px;
   font-size: 16px;
   color: #ffffff;
-  background-color: #0055b8;
+  background-color: #42146d;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -59,7 +59,7 @@
 
 .campo-senha button.btn-olho:hover {
   background: none;
-  color: #0055b8;
+  color: #42146d;
 }
 
 .login-admin .erro {
@@ -152,14 +152,14 @@
 .btn-salvar {
   padding: 10px 20px;
   color: #ffffff;
-  background-color: #0055b8;
+  background-color: #42146d;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .btn-salvar:hover {
-  background-color: #003b7a;
+  background-color: #7944aa;
 }
 
 .btn-cancelar {
@@ -205,11 +205,11 @@
 }
 
 .btn-editar {
-  background-color: #0878ff;
+  background-color: #42146d;
 }
 
 .btn-editar:hover {
-  background-color: #0055b8;
+  background-color: #7944aa;
 }
 
 .btn-remover {
@@ -237,13 +237,13 @@
   padding: 2px 10px;
   text-align: center;
   color: #fff;
-  background-color: #0055b8;
+  background-color: #42146d;
   border-radius: 12px;
 }
 
 .btn-detalhes {
   padding: 6px 12px;
-  border: 1px solid #0055b8;
+  border: 1px solid #42146d;
   border-radius: 4px;
   cursor: pointer;
   color: #0055b8;
@@ -251,5 +251,5 @@
 }
 
 .btn-detalhes:hover {
-  background-color: #eaf2ff;
+  background-color: #7944aa;
 }
