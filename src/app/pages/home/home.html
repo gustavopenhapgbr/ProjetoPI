@@ -1,7 +1,6 @@
 <app-banner></app-banner>
 <app-beneficios></app-beneficios>
 <app-faixa></app-faixa>
-<h2 class="titulo1">Catalogo de Produtos</h2>
 
 <div class="lateral">
     <div class="grupo">
@@ -34,20 +33,29 @@
         <div class="foto"><img src="/images/isqueiro.png" alt="Camisa azul bebê"></div>
         <div class="foto"><img src="/images/conjunto_azul.png" alt="Camiseta off-white"></div>
         <div class="foto"><img src="/images/calca_1_cinza_logo_lateral.png" alt="Camiseta azul petróleo"></div>
-</div>
-
-<h1 class="titulo">Produtos em destaque</h1>
-
-<div class="container" *ngIf="produtosDestaque.length > 0">
-    <div class="grade">
-        @for (produto of produtosDestaque; track produto.id) {
-        <app-card (click)="irPageProduto(produto)" [produto]="produto"></app-card>
-        }
     </div>
 </div>
 
-<p class="sem-produtos" *ngIf="produtosDestaque.length === 0">
-    Nenhum produto em destaque no momento.
-</p>
+<div class="section-titulo">
+    <h1 class="titulo">Produtos em destaque</h1>
+    <p>Selecionados a dedo.</p>
+</div>
+
+<section class="destaques">
+    @if (produtosDestaque.length > 0) {
+        <div class="barra-categoria">
+            <span>{{ produtosDestaque.length }} produto{{ produtosDestaque.length === 1 ? '' : 's' }}</span>
+            <span class="linha"></span>
+        </div>
+
+        <div class="grade">
+            @for (produto of produtosDestaque; track produto.id) {
+                <app-card (click)="irPageProduto(produto)" [produto]="produto"></app-card>
+            }
+        </div>
+    } @else {
+        <p class="sem-produtos">Nenhum produto cadastrado nesta categoria.</p>
+    }
+</section>
 
 <app-depoimentos></app-depoimentos>

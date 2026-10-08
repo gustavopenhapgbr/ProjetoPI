@@ -1,5 +1,5 @@
 import { Injectable, effect, inject, signal } from '@angular/core';
-import { Produto } from '../produto/produto';
+import { Produto, ProdutoService } from '../produto/produto';
 import { AuthService } from '../auth/auth';
 
 export interface ItemCarrinho {
@@ -14,6 +14,7 @@ export interface ItemCarrinho {
 export class CarrinhoService {
   private readonly prefixo = 'fcustom_carrinho_';
   private auth = inject(AuthService);
+  private produtoService = inject(ProdutoService);
 
   itens = signal<ItemCarrinho[]>([]);
 
@@ -28,20 +29,31 @@ export class CarrinhoService {
     return email ? this.prefixo + email : null;
   }
 
+  private sincronizar(itens: ItemCarrinho[]): ItemCarrinho[] {
+    return itens.flatMap((item) => {
+      const atual = this.produtoService.buscarPorId(item.produto.id);
+      return atual ? [{ ...item, produto: atual }] : [];
+    });
+  }
+
   private carregar(email: string): void {
     if (!email) {
       this.itens.set([]);
       return;
     }
 
-    const dados = localStorage.getItem(this.prefixo + email);
+    const chave = this.prefixo + email;
+    const dados = localStorage.getItem(chave);
     if (!dados) {
       this.itens.set([]);
       return;
     }
 
     try {
-      this.itens.set(JSON.parse(dados));
+      const salvos: ItemCarrinho[] = JSON.parse(dados);
+      const lista = this.sincronizar(salvos);
+      this.itens.set(lista);
+      localStorage.setItem(chave, JSON.stringify(lista));
     } catch (error) {
       console.error('Erro ao carregar o carrinho', error);
       this.itens.set([]);

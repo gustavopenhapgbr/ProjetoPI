@@ -96,5 +96,5 @@
 .barra-categoria { max-width: 1320px; display: flex; align-items: center; gap: 18px; margin: 0 auto 20px; color: #766d7b; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; }
 .linha { height: 1px; flex: 1; background: #e4dfe7; }
 .grade { gap: 28px; }
-.pagina-categoria > p { margin-top: 24px; border: 0; box-shadow: 0 12px 32px rgb(36 19 61 / 7%); }
+.pagina-categoria > p { font-size: 13px; margin-top: 24px; border: 0; box-shadow: 0 12px 32px rgb(36 19 61 / 7%); }
 @media (max-width: 600px) { .pagina-categoria { padding: 20px 18px 64px; } .trilha { margin-bottom: 38px; } }
