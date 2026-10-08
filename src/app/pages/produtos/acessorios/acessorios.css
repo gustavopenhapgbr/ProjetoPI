@@ -85,7 +85,7 @@
 }
 
 .pagina-categoria { min-height: calc(100vh - 48px); padding: 24px 6% 88px; background: #fafafa; }
-.trilha { max-width: 1320px; margin: 0 auto 54px; color: #8a8490; font-size: .78rem; }
+.trilha { display: flex; justify-content: center; max-width: 1320px; margin: 0 auto 54px; color: #8a8490; font-size: .78rem; }
 .trilha a { color: #8a8490; text-decoration: none; }
 .trilha a:hover { color: #24133d; }
 .trilha span { margin: 0 9px; color: #c4bdc9; }

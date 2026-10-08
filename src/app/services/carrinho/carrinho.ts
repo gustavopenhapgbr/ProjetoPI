@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 import { Produto } from '../produto/produto';
+import { AuthService } from '../auth/auth';
 
 export interface ItemCarrinho {
   produto: Produto;
@@ -11,28 +12,49 @@ export interface ItemCarrinho {
   providedIn: 'root'
 })
 export class CarrinhoService {
-  private readonly chave = 'fcustom_carrinho';
+  private readonly prefixo = 'fcustom_carrinho_';
+  private auth = inject(AuthService);
+
   itens = signal<ItemCarrinho[]>([]);
 
   constructor() {
-    this.carregarCarrinho();
+    effect(() => {
+      this.carregar(this.auth.usuarioLogado());
+    });
+  }
+
+  private chaveAtual(): string | null {
+    const email = this.auth.usuarioLogado();
+    return email ? this.prefixo + email : null;
+  }
+
+  private carregar(email: string): void {
+    if (!email) {
+      this.itens.set([]);
+      return;
+    }
+
+    const dados = localStorage.getItem(this.prefixo + email);
+    if (!dados) {
+      this.itens.set([]);
+      return;
+    }
+
+    try {
+      this.itens.set(JSON.parse(dados));
+    } catch (error) {
+      console.error('Erro ao carregar o carrinho', error);
+      this.itens.set([]);
+    }
   }
 
   carregarCarrinho(): void {
-    const dados = localStorage.getItem(this.chave);
-    if (dados) {
-      try {
-        this.itens.set(JSON.parse(dados));
-      } catch (error) {
-        console.error('Erro ao carregar o carrinho', error);
-        this.itens.set([]);
-      }
-    }
+    this.carregar(this.auth.usuarioLogado());
   }
 
   adicionar(produto: Produto, tamanho: string = 'M'): void {
     const listaAtual = this.itens();
-    
+
     const indice = listaAtual.findIndex(
       (item) => item.produto.id === produto.id && item.tamanho === tamanho
     );
@@ -55,7 +77,7 @@ export class CarrinhoService {
     const listaAtual = [...this.itens()];
     if (index >= 0 && index < listaAtual.length) {
       const novaQtd = listaAtual[index].quantidade + delta;
-      
+
       if (novaQtd <= 0) {
         this.remover(index);
         return;
@@ -75,10 +97,12 @@ export class CarrinhoService {
 
   finalizarCompra(): void {
     this.itens.set([]);
-    localStorage.removeItem(this.chave);
+    const chave = this.chaveAtual();
+    if (chave) localStorage.removeItem(chave);
   }
 
   private salvar(itens: ItemCarrinho[]): void {
-    localStorage.setItem(this.chave, JSON.stringify(itens));
+    const chave = this.chaveAtual();
+    if (chave) localStorage.setItem(chave, JSON.stringify(itens));
   }
 }
