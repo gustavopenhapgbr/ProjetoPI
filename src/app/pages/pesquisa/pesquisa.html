@@ -1,8 +1,21 @@
-<section class="pesquisa-pagina">
-  <h2>Resultados para "{{ termo() }}"</h2>
+<section class="pagina-pesquisa">
+  <div class="trilha">
+    <a routerLink="/">Início</a><span>/</span><strong>Pesquisa</strong>
+  </div>
+
+  <div class="cabecalho-pesquisa">
+    <span class="eyebrow">Resultados da busca</span>
+    <h1>"{{ termo() }}"</h1>
+    <p>Confira o que encontramos para a sua pesquisa.</p>
+  </div>
 
   @if (resultados().length) {
-    <div class="lista">
+    <div class="barra-categoria">
+      <span>{{ resultados().length }} produto{{ resultados().length === 1 ? '' : 's' }}</span>
+      <span class="linha"></span>
+    </div>
+
+    <div class="grade">
       @for (p of resultados(); track p.id) {
         <a class="link-card" [routerLink]="['/produto', p.id]">
           <app-card [produto]="p" />
