@@ -13,19 +13,22 @@ import { Pesquisa } from './pages/pesquisa/pesquisa';
 import { Register } from './component/register/register';
 import { ForgotPassword } from './component/forgot-password/forgot-password';
 import { User } from './pages/user/user';
+import { Carrinho } from './pages/carrinho/carrinho';
+import { userGuard } from './services/auth/user-guard';
 
 export const routes: Routes = [
-    {path:'', component:Home},
-    {path:'camisetas', component:Camisetas},
-    {path:'calcas', component:Calcas},
-    {path:'shorts', component:Shorts},
-    {path:'conjuntos', component:Conjuntos},
-    {path:'acessorios', component:Acessorios},
-    {path: 'login', component:Login},
-    {path: 'register', component:Register},
-    {path: 'forgot-password', component:ForgotPassword},
-    {path: 'perfil', component:User},
-    {path: 'admin', component:Admin, canActivate: [adminGuard]},
+    {path: '', component: Home},
+    {path: 'camisetas', component: Camisetas},
+    {path: 'calcas', component: Calcas},
+    {path: 'shorts', component: Shorts},
+    {path: 'conjuntos', component: Conjuntos},
+    {path: 'acessorios', component: Acessorios},
+    {path: 'login', component: Login},
+    {path: 'register', component: Register},
+    {path: 'forgot-password', component: ForgotPassword},
+    {path: 'perfil', component: User, canActivate: [userGuard]},
+    {path: 'admin', component: Admin, canActivate: [adminGuard]},
     {path: 'produto/:id', component: PaginaProduto},
-    { path: 'pesquisa', component: Pesquisa }, 
+    {path: 'pesquisa', component: Pesquisa }, 
+    {path: 'carrinho', component: Carrinho }, 
 ];

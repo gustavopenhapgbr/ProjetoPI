@@ -2,12 +2,15 @@
   display: flex;
   justify-content: center;
   padding: 50px 16px;
+  background: #fafafa;
+  min-height: calc(100vh - 80px);
 }
 
 form {
   width: 100%;
   max-width: 380px;
   padding: 32px 28px;
+  max-height: 519px;
   display: flex;
   flex-direction: column;
   background: #423a3a;

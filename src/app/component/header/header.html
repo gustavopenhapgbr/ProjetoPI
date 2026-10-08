@@ -4,25 +4,25 @@
   </div>
 
   <div class="pesquisa">
-  <input
-    #campo
-    type="text"
-    placeholder="Pesquisar produto"
-    [value]="termo()"
-    (input)="digitar(campo.value)"
-    (keyup.enter)="pesquisar()"
-    (blur)="aberto.set(false)"
-  >
-  <span (click)="pesquisar()">⌕</span>
+    <input
+      #campo
+      type="text"
+      placeholder="Pesquisar produto"
+      [value]="termo()"
+      (input)="digitar(campo.value)"
+      (keyup.enter)="pesquisar()"
+      (blur)="aberto.set(false)"
+    >
+    <span (click)="pesquisar()">⌕</span>
 
-  @if (aberto() && sugestoes().length > 0) {
-    <ul class="sugestoes">
-      @for (p of sugestoes(); track p.id) {
-        <li (mousedown)="escolher(p)">{{ p.nome }}</li>
-      }
-    </ul>
-  }
-</div>
+    @if (aberto() && sugestoes().length > 0) {
+      <ul class="sugestoes">
+        @for (p of sugestoes(); track p.id) {
+          <li (mousedown)="escolher(p)">{{ p.nome }}</li>
+        }
+      </ul>
+    }
+  </div>
 
   <div class="opcoes">
     <div class="fale-conosco">
@@ -30,19 +30,25 @@
       <span>Fale Conosco</span>
     </div>
 
-    <div class="usuario">
+    <a class="carrinho-button" routerLink="/carrinho">
+      <img class="icone" src="/images/carrinho.png" alt="Carrinho">
+    </a>
 
+    <div class="usuario">
       <div class="usuario-link">
         <span class="icone"><img src="/images/usuario.png" class="icone" alt="Usuário"></span>
       </div>
 
       <div class="dropdown">
-        <a routerLink="/login">Entrar</a>
-        <a routerLink="/register">Criar conta</a>
+        @if (auth.isLogado()) {
+          <a routerLink="/perfil">Minha conta</a>
+          <a (click)="sair()" style="cursor: pointer;">Sair</a>
+        } @else {
+          <a routerLink="/login">Entrar</a>
+          <a routerLink="/register">Criar conta</a>
+        }
       </div>
-
     </div>
-
-    <img class="icone" src="/images/carrinho.png" alt="Carrinho">
+    
   </div>
 </header>

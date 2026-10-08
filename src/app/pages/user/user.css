@@ -2,11 +2,14 @@
   display: flex;
   justify-content: center;
   padding: 50px 16px;
+  background: #fafafa;
+  min-height: calc(100vh - 80px);
 }
 
 .card {
   width: 100%;
   max-width: 380px;
+  max-height: 520px;
   padding: 32px 28px;
   display: flex;
   flex-direction: column;

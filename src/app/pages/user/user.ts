@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth/auth';
   templateUrl: './user.html',
   styleUrl: './user.css',
 })
+
 export class User {
   private auth = inject(AuthService);
   private router = inject(Router);

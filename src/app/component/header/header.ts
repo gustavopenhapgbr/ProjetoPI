@@ -3,13 +3,13 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth';
 import { Produto, ProdutoService } from '../../services/produto/produto';
 
-
 @Component({
   selector: 'app-header',
   imports: [RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
+
 export class Header {
   private produtoService = inject(ProdutoService);
 
@@ -40,7 +40,6 @@ export class Header {
     this.termo.set(p.nome);
     this.pesquisar();
   }
-
 
   sair() {
     this.auth.sair();

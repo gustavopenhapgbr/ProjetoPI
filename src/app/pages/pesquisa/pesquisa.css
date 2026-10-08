@@ -1,5 +1,7 @@
 .pesquisa-pagina {
   padding: 30px 25px;
+  background: #fafafa;
+  min-height: calc(100vh - 80px);
 }
 
 .lista {

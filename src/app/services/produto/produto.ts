@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-
 export interface Produto {
   id: number;
   nome: string;
@@ -14,6 +13,7 @@ export interface Produto {
 @Injectable({
   providedIn: 'root',
 })
+
 export class ProdutoService {
   private chave = 'fcustom_produtos';
 
@@ -49,14 +49,12 @@ export class ProdutoService {
   buscar(termo: string): Produto[] {
     const busca = termo.trim();
 
-
     if (busca === '') {
       return [];
     }
 
     const produtos = this.listar();
     const encontrados: Produto[] = [];
-
 
     for (const produto of produtos) {
 

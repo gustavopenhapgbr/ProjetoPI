@@ -211,3 +211,15 @@ header {
 .link-admin:hover {
     color: #0055b8;
 }
+
+.carrinho-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
