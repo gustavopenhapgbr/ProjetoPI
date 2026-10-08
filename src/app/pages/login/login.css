@@ -10,10 +10,10 @@ form {
   padding: 32px 28px;
   display: flex;
   flex-direction: column;
-  background: #777;
-  border: 1px solid #eee;
+  background: #423a3a;
+  border: 1px solid #423a3a;
   border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
+  box-shadow: 0 8px 30px rgb(191, 6, 207);
   box-sizing: border-box;
 }
 
