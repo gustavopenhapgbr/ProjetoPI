@@ -40,6 +40,9 @@
       </div>
 
       <div class="dropdown">
+        @if (auth.isAdmin()) {
+          <a routerLink="/admin">Painel Administrativo</a>
+        }
         @if (auth.isLogado()) {
           <a routerLink="/perfil">Minha conta</a>
           <a (click)="sair()" style="cursor: pointer;">Sair</a>

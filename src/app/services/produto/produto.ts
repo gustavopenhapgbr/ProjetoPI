@@ -8,6 +8,10 @@ export interface Produto {
   imagem: string;
   descricao: string;
   destaque: boolean;
+  estoqueS: number;
+  estoqueM: number;
+  estoqueL: number;
+  estoqueXL: number;
 }
 
 @Injectable({
@@ -42,6 +46,10 @@ export class ProdutoService {
         imagem: produto.imagem ?? '',
         descricao: produto.descricao ?? '',
         destaque,
+        estoqueS: produto.estoqueS ?? 0,
+        estoqueM: produto.estoqueM ?? 0,
+        estoqueL: produto.estoqueL ?? 0,
+        estoqueXL: produto.estoqueXL ?? 0,
       };
     });
   }
@@ -103,6 +111,38 @@ export class ProdutoService {
   remover(id: number): void {
     const produtos = this.listar().filter((p) => p.id !== id);
     this.salvarLista(produtos);
+  }
+
+    buscarPorId(id: number): Produto | undefined {
+    return this.listar().find((p) => p.id === id);
+  }
+
+  estoqueDe(produto: Produto, tamanho: string): number {
+    switch (tamanho) {
+      case 'S': return produto.estoqueS;
+      case 'M': return produto.estoqueM;
+      case 'L': return produto.estoqueL;
+      case 'XL': return produto.estoqueXL;
+      default: return 0;
+    }
+  }
+
+  baixarEstoque(id: number, tamanho: string, quantidade: number): void {
+    const produtos = this.listar();
+    const produto = produtos.find((p) => p.id === id);
+    if (!produto) return;
+
+    switch (tamanho) {
+      case 'S': produto.estoqueS = Math.max(0, produto.estoqueS - quantidade); break;
+      case 'M': produto.estoqueM = Math.max(0, produto.estoqueM - quantidade); break;
+      case 'L': produto.estoqueL = Math.max(0, produto.estoqueL - quantidade); break;
+      case 'XL': produto.estoqueXL = Math.max(0, produto.estoqueXL - quantidade); break;
+    }
+
+    const total = produto.estoqueS + produto.estoqueM + produto.estoqueL + produto.estoqueXL;
+
+    const restantes = total === 0 ? produtos.filter((p) => p.id !== id) : produtos;
+    this.salvarLista(restantes);
   }
 
   private salvarLista(produtos: Produto[]): void {

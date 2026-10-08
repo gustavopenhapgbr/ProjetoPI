@@ -19,17 +19,37 @@
           <h1 id="produto-titulo">{{ item.nome }}</h1>
           <p class="preco">{{ item.preco | currency: 'BRL' }}</p>
           <p class="avaliacao" aria-label="Avaliação 4.9 de 5">★ 4.9</p>
-          <p class="estoque">Disponibilidade: <strong>Em estoque</strong></p>
+          <p class="estoque">
+            Disponibilidade:
+            @if (totalEstoque(item) > 0) {
+              <strong>Em estoque</strong>
+            } @else {
+              <strong>Esgotado</strong>
+            }
+          </p>
 
           <div class="seletor-tamanho" aria-label="Escolha o tamanho">
             <span class="tamanho-label">Tamanho</span>
-            <button type="button" class="tamanho">S</button>
-            <button type="button" class="tamanho selecionado" aria-pressed="true">M</button>
-            <button type="button" class="tamanho">L</button>
-            <button type="button" class="tamanho">XL</button>
+            @for (t of tamanhos; track t) {
+              <button
+                type="button"
+                class="tamanho"
+                [class.selecionado]="tamanhoAtual(item) === t"
+                [attr.aria-pressed]="tamanhoAtual(item) === t"
+                [disabled]="estoqueDe(item, t) === 0"
+                (click)="selecionarTamanho(t)">
+                {{ t }}
+              </button>
+            }
           </div>
 
-          <button type="button" class="adicionar">Adicionar ao carrinho <span>+</span></button>
+          <button
+              type="button"
+              class="adicionar"
+              [disabled]="!tamanhoAtual(item)"
+              (click)="adicionarAoCarrinho()">
+              Adicionar ao carrinho<span>+</span>
+          </button>
 
           <div class="detalhes">
             <details open>

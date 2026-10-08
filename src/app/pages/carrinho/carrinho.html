@@ -1,3 +1,79 @@
-<section class="carrinho">
+<div class="carrinho">
+  <div class="carrinho-conteudo">
+    
+    <div class="carrinho-esquerda">
+      <h2 class="titulo-secao">Seu Carrinho ({{ carrinhoService.itens().length }})</h2>
 
-</section>
+      @if (carrinhoService.itens().length === 0) {
+        <div class="carrinho-vazio">
+          <p>O seu carrinho está vazio.</p>
+          <a routerLink="/" class="btn-loja">Voltar à loja</a>
+        </div>
+      } @else {
+        <div class="lista-itens">
+          @for (item of carrinhoService.itens(); track $index) {
+            <div class="item-card">
+              <div class="imagem-box">
+                @if (item.produto.imagem) {
+                  <img [src]="item.produto.imagem" [alt]="item.produto.nome" />
+                } @else {
+                  <div class="sem-imagem">Sem imagem</div>
+                }
+              </div>
+
+              <div class="detalhes">
+                <h3 class="nome-produto">{{ item.produto.nome }}</h3>
+                <p class="tamanho-produto">Tamanho: {{ item.tamanho }}</p>
+                <strong class="preco-produto">{{ item.produto.preco | currency: 'BRL' }}</strong>
+              </div>
+
+              <div class="acoes">
+                <div class="controle-quantidade">
+                  <button type="button" (click)="alterarQtd($index, -1)">-</button>
+                  <span>{{ item.quantidade }}</span>
+                  <button
+                    type="button"
+                    [disabled]="item.quantidade >= estoqueDisponivel(item)"
+                    (click)="alterarQtd($index, 1)">
+                    +
+                  </button>
+                </div>
+                <button type="button" class="btn-remover" (click)="remover($index)">Remover</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="resumo-card">
+      <h3>Resumo do Pedido</h3>
+
+      <div class="linha-resumo">
+        <span>Subtotal</span>
+        <span>{{ calcularSubtotal() | currency: 'BRL' }}</span>
+      </div>
+
+      <div class="linha-resumo">
+        <span>Frete</span>
+        <span class="gratis">Grátis</span>
+      </div>
+
+      <hr class="divisor" />
+
+      <div class="linha-resumo total">
+        <strong>Total</strong>
+        <strong>{{ calcularSubtotal() | currency: 'BRL' }}</strong>
+      </div>
+
+      <button
+        type="button"
+        class="btn-finalizar"
+        [disabled]="carrinhoService.itens().length === 0"
+        (click)="finalizarCompra()">
+        Finalizar Comprar
+      </button>
+    </div>
+
+  </div>
+</div>

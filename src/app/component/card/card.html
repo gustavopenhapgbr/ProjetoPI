@@ -1,11 +1,10 @@
 <article class="card">
   <div class="visual">
     @if (produto().imagem) {
-    <img class="imagem" [src]="produto().imagem" [alt]="produto().nome" />
+      <img class="imagem" [src]="produto().imagem" [alt]="produto().nome" />
     } @else {
-    <div class="imagem-placeholder" aria-hidden="true">Sem imagem</div>
+      <div class="imagem-placeholder" aria-hidden="true">Sem imagem</div>
     }
-
   </div>
 
   <div class="conteudo">
@@ -21,9 +20,5 @@
       <span class="preco-antigo">{{ produto().preco * 1.1 | currency: 'BRL' }}</span>
       <span class="desconto">10% off</span>
     </div>
-
-    <button class="comprar" type="button">
-      Comprar agora
-    </button>
   </div>
 </article>

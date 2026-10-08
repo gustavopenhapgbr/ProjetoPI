@@ -84,6 +84,10 @@ export class Admin implements OnInit {
     return grupo.precoMin === grupo.precoMax ? min : min + ' – ' + max;
   }
 
+  totalEstoque(produto: Produto): number {
+    return produto.estoqueS + produto.estoqueM + produto.estoqueL + produto.estoqueXL;
+  }
+
   produtoVazio(): Produto {
     return {
       id: 0,
@@ -93,6 +97,10 @@ export class Admin implements OnInit {
       imagem: '',
       descricao: '',
       destaque: false,
+      estoqueS: 0,
+      estoqueM: 0,
+      estoqueL: 0,
+      estoqueXL: 0,
     };
   }
 
@@ -119,9 +127,31 @@ export class Admin implements OnInit {
     leitor.readAsDataURL(arquivo);
   }
 
-  salvarProduto(): void {
+    salvarProduto(): void {
     if (!this.produtoEmEdicao.nome.trim() || this.produtoEmEdicao.preco <= 0) {
       alert('Preencha ao menos o nome e um preço válido.');
+      return;
+    }
+
+        const p = this.produtoEmEdicao;
+
+    p.estoqueS = Number(p.estoqueS ?? 0);
+    p.estoqueM = Number(p.estoqueM ?? 0);
+    p.estoqueL = Number(p.estoqueL ?? 0);
+    p.estoqueXL = Number(p.estoqueXL ?? 0);
+
+    const quantidades = [p.estoqueS, p.estoqueM, p.estoqueL, p.estoqueXL];
+    const invalido = quantidades.some((q) => !Number.isInteger(q) || q < 0);
+
+    if (invalido) {
+      alert('As quantidades de estoque devem ser números inteiros iguais ou maiores que 0.');
+      return;
+    }
+
+    const total = p.estoqueS + p.estoqueM + p.estoqueL + p.estoqueXL;
+
+    if (total === 0) {
+      alert('Informe a quantidade em estoque de pelo menos um tamanho.');
       return;
     }
 

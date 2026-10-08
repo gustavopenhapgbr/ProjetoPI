@@ -1,4 +1,5 @@
-<section class="painel-admin">
+<section class="admin-section">
+  <section class="painel-admin">
   <div class="topo-admin">
     <h1>Painel Administrativo</h1>
     <button class="btn-sair" (click)="sair()">Sair</button>
@@ -54,6 +55,26 @@
       placeholder="Descrição do produto"
     ></textarea>
 
+    <label>Quantidade em estoque por tamanho</label>
+    <div class="estoque-tamanhos">
+      <div class="campo-tamanho">
+        <label for="estoqueS">S</label>
+        <input id="estoqueS" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueS" />
+      </div>
+      <div class="campo-tamanho">
+        <label for="estoqueM">M</label>
+        <input id="estoqueM" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueM" />
+      </div>
+      <div class="campo-tamanho">
+        <label for="estoqueL">L</label>
+        <input id="estoqueL" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueL" />
+      </div>
+      <div class="campo-tamanho">
+        <label for="estoqueXL">XL</label>
+        <input id="estoqueXL" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueXL" />
+      </div>
+    </div>
+
     <label class="campo-destaque">
       <input
         type="checkbox"
@@ -104,7 +125,13 @@
         <ng-container *ngIf="categoriasAbertas.has(grupo.categoria)">
           <tr class="linha-produto" *ngFor="let produto of grupo.produtos">
             <td>↳ {{ produto.nome }}</td>
-            <td>1</td>
+            <td>
+              {{ totalEstoque(produto) }}
+              <small>
+                (S: {{ produto.estoqueS }} · M: {{ produto.estoqueM }} ·
+                L: {{ produto.estoqueL }} · XL: {{ produto.estoqueXL }})
+              </small>
+            </td>
             <td>R$ {{ produto.preco.toFixed(2) }}</td>
             <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
             <td class="acoes">
@@ -116,4 +143,5 @@
       </tbody>
     </table>
   </div>
+</section>
 </section>

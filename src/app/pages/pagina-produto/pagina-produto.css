@@ -220,6 +220,12 @@
   font-weight: 700;
 }
 
+.tamanho:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
 @media (max-width: 760px) {
   .pagina-produto {
     padding: 24px 16px 48px;
