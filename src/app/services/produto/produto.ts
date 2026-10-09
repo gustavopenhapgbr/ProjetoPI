@@ -113,7 +113,7 @@ export class ProdutoService {
     this.salvarLista(produtos);
   }
 
-    buscarPorId(id: number): Produto | undefined {
+  buscarPorId(id: number): Produto | undefined {
     return this.listar().find((p) => p.id === id);
   }
 

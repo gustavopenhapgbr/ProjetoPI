@@ -8,113 +8,104 @@ export interface ItemCarrinho {
   quantidade: number;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CarrinhoService {
-  private readonly prefixo = 'fcustom_carrinho_';
   private auth = inject(AuthService);
   private produtoService = inject(ProdutoService);
 
+
+
+
+  
   itens = signal<ItemCarrinho[]>([]);
 
+
+
+
+
   constructor() {
-    effect(() => {
-      this.carregar(this.auth.usuarioLogado());
-    });
+    effect(() => this.carregarCarrinho());
   }
 
-  private chaveAtual(): string | null {
+
+
+
+
+  private chave(): string | null {
     const email = this.auth.usuarioLogado();
-    return email ? this.prefixo + email : null;
+    return email ? 'fcustom_carrinho_' + email : null;
   }
 
-  private sincronizar(itens: ItemCarrinho[]): ItemCarrinho[] {
-    return itens.flatMap((item) => {
+
+
+
+
+  private atualizar(lista: ItemCarrinho[]): void {
+    this.itens.set(lista);
+    const chave = this.chave();
+    if (chave) localStorage.setItem(chave, JSON.stringify(lista));
+  }
+
+
+
+
+
+  carregarCarrinho(): void {
+    const chave = this.chave();
+    const dados = chave ? localStorage.getItem(chave) : null;
+    const salvos: ItemCarrinho[] = dados ? JSON.parse(dados) : [];
+
+    const lista = salvos.flatMap((item) => {
       const atual = this.produtoService.buscarPorId(item.produto.id);
       return atual ? [{ ...item, produto: atual }] : [];
     });
+
+    this.atualizar(lista);
   }
 
-  private carregar(email: string): void {
-    if (!email) {
-      this.itens.set([]);
-      return;
-    }
 
-    const chave = this.prefixo + email;
-    const dados = localStorage.getItem(chave);
-    if (!dados) {
-      this.itens.set([]);
-      return;
-    }
 
-    try {
-      const salvos: ItemCarrinho[] = JSON.parse(dados);
-      const lista = this.sincronizar(salvos);
-      this.itens.set(lista);
-      localStorage.setItem(chave, JSON.stringify(lista));
-    } catch (error) {
-      console.error('Erro ao carregar o carrinho', error);
-      this.itens.set([]);
-    }
-  }
 
-  carregarCarrinho(): void {
-    this.carregar(this.auth.usuarioLogado());
-  }
 
   adicionar(produto: Produto, tamanho: string = 'M'): void {
-    const listaAtual = this.itens();
+    const lista = this.itens();
+    const mesmoItem = (item: ItemCarrinho) =>
+      item.produto.id === produto.id && item.tamanho === tamanho;
 
-    const indice = listaAtual.findIndex(
-      (item) => item.produto.id === produto.id && item.tamanho === tamanho
+    this.atualizar(
+      lista.some(mesmoItem)
+        ? lista.map((item) => (mesmoItem(item) ? { ...item, quantidade: item.quantidade + 1 } : item))
+        : [...lista, { produto, tamanho, quantidade: 1 }]
     );
-
-    let novaLista: ItemCarrinho[];
-
-    if (indice !== -1) {
-      novaLista = listaAtual.map((item, index) =>
-        index === indice ? { ...item, quantidade: item.quantidade + 1 } : item
-      );
-    } else {
-      novaLista = [...listaAtual, { produto, tamanho, quantidade: 1 }];
-    }
-
-    this.itens.set(novaLista);
-    this.salvar(novaLista);
   }
+
+
+
+
 
   alterarQuantidade(index: number, delta: number): void {
-    const listaAtual = [...this.itens()];
-    if (index >= 0 && index < listaAtual.length) {
-      const novaQtd = listaAtual[index].quantidade + delta;
-
-      if (novaQtd <= 0) {
-        this.remover(index);
-        return;
-      }
-
-      listaAtual[index] = { ...listaAtual[index], quantidade: novaQtd };
-      this.itens.set(listaAtual);
-      this.salvar(listaAtual);
-    }
+    this.atualizar(
+      this.itens()
+        .map((item, i) => (i === index ? { ...item, quantidade: item.quantidade + delta } : item))
+        .filter((item) => item.quantidade > 0)   // quantidade 0 remove o item
+    );
   }
+
+
+
+
 
   remover(index: number): void {
-    const novaLista = this.itens().filter((_, i) => i !== index);
-    this.itens.set(novaLista);
-    this.salvar(novaLista);
+    this.atualizar(this.itens().filter((_, i) => i !== index));
   }
+
+
+
+
 
   finalizarCompra(): void {
     this.itens.set([]);
-    const chave = this.chaveAtual();
+    const chave = this.chave();
     if (chave) localStorage.removeItem(chave);
-  }
-
-  private salvar(itens: ItemCarrinho[]): void {
-    const chave = this.chaveAtual();
-    if (chave) localStorage.setItem(chave, JSON.stringify(itens));
   }
 }
