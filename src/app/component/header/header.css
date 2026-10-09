@@ -166,7 +166,7 @@ header {
 
     width: 180px;
 
-    background-color: whitesmoke;
+    background-color: #42146d;
 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
@@ -180,7 +180,7 @@ header {
 
     padding: 16px;
 
-    color: #333;
+    color: #fff;
 
     text-decoration: none;
 
@@ -192,7 +192,7 @@ header {
 
 .dropdown a:hover{
     display: block;
-    background-color: #f2f2f2;
+    background-color: #a740eb;
 }
 
 /* mostra menu hover */

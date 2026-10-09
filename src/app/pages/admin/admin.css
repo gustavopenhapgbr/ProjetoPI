@@ -38,7 +38,7 @@
 }
 
 .login-admin button:hover {
-  background-color: #003b7a;
+  background-color: #7944aa;
 }
 
 .campo-senha button.btn-olho {
@@ -254,8 +254,8 @@
   border: 1px solid #42146d;
   border-radius: 4px;
   cursor: pointer;
-  color: #0055b8;
-  background: #fff;
+  color: #fff;
+  background: #42146d;
 }
 
 .btn-detalhes:hover {
