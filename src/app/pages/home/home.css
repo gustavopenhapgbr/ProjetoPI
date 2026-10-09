@@ -15,7 +15,7 @@
     animation: spin 20s infinite linear;
     padding-right: 1em;
     height: 325px;
-    background-color:  #36454F;
+    background-color:  #666666;
 }
 
 .lateral::-webkit-scrollbar {
@@ -31,7 +31,7 @@
     border-radius: 10px;
     text-align: center;
     align-content: center;
-    background-color:  #222c33;
+    background-color:  #666666;
 }
 
 .foto img {
