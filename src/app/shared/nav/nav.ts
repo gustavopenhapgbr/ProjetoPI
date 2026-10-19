@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
 export class Nav {
   itensMenu = [
     { label: 'Camisetas', link: '/camisetas' },
-    {label: 'Calças', link: '/calcas'},
+    { label: 'Calças', link: '/calcas'},
     { label: 'Shorts', link: '/shorts' },
     { label: 'Conjuntos', link: '/conjuntos' },
     { label: 'Acessórios', link: '/acessorios' }
