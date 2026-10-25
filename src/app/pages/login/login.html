@@ -1,0 +1,29 @@
+<div class="content-container">
+  <form>
+    <img src="images/guaxinim.png" alt="F.CUSTOM" class="mascote">
+
+    <h1>Bem-vindo a <br>F.Company</h1>
+    <p>Entre para continuar comprando</p>
+
+    <label for="email">E-mail</label>
+    <input class="input-simples" id="email" name="email" type="email"
+      [(ngModel)]="email"
+      (keyup)="validarFormulario()" />
+
+    <div class="linha-senha">
+      <label for="senha">Senha</label>
+      <a routerLink="/forgot-password" class="link">Esqueceu a senha?</a>
+    </div>
+    <input class="input-simples" id="senha" name="senha" type="password"
+      [(ngModel)]="senha"
+      (keyup)="validarFormulario()" />
+
+    <button type="button" class="input-submeter"
+      [disabled]="botaoDesabilitado"
+      (click)="entrar()">Entrar</button>
+
+    <span class="cadastro">
+      Não tem conta? <a routerLink="/register" class="link">Criar conta</a>
+    </span>
+  </form>
+</div>
