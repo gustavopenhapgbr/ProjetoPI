@@ -1,0 +1,26 @@
+<div class="content-container">
+  <form>
+    <img src="images/guaxinim.png" alt="F.CUSTOM" class="mascote">
+
+    <h1>Crie sua conta</h1>
+    <p>Cadastre-se para começar a comprar</p>
+
+    <label for="email">E-mail</label>
+    <input class="input-simples" id="email" name="email" type="email"
+      [(ngModel)]="email" />
+
+    <label for="senha">Senha</label>
+    <input class="input-simples" id="senha" name="senha" type="password"
+      [(ngModel)]="senha" />
+
+    <label for="confirmar-senha">Confirmar senha</label>
+    <input class="input-simples" id="confirmar-senha" name="confirmarSenha" type="password"
+      [(ngModel)]="confirmarSenha" />
+
+    @if (erro !== '') {
+      <span class="erro">{{ erro }}</span>
+    }
+
+    <button type="button" class="input-submeter" (click)="cadastrar()">Cadastrar</button>
+  </form>
+</div>
