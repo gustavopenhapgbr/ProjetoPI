@@ -1,0 +1,38 @@
+<section class="pagina-categoria">
+  <div class="trilha">
+    <a routerLink="/">Início</a>
+    <span>/</span>
+    <strong>{{ titulo }}</strong>
+  </div>
+
+  <div class="cabecalho-categoria">
+    <span class="eyebrow">Coleção F.COMPANY</span>
+    <h1>{{ titulo }}</h1>
+    <p>{{ subtitulo }}</p>
+  </div>
+
+  @if (produtos.length > 0) {
+    <div class="barra-categoria">
+      <span>{{ produtos.length }} produtos</span>
+      <span class="linha"></span>
+    </div>
+
+    <div class="grade">
+      @for (produto of produtos; track produto.id) {
+        <article class="card">
+          <div class="visual">
+            <img class="imagem" [src]="produto.imagem" [alt]="produto.nome" />
+          </div>
+          <div class="conteudo">
+            <span class="etiqueta">{{ produto.categoria }}</span>
+            <h2 class="nome">{{ produto.nome }}</h2>
+            <p class="descricao">{{ produto.descricao }}</p>
+            <strong class="preco">{{ formatarPreco(produto.preco) }}</strong>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <p>Nenhum produto cadastrado nesta categoria.</p>
+  }
+</section>
