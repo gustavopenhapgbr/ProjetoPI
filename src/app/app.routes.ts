@@ -10,5 +10,5 @@ export const routes: Routes = [
     { path: 'login', component: Login, title:'Login' },
     { path: 'register', component: Register, title:'Criar conta' },
     { path: 'forgot-password', component: ForgotPassword, title:'Esqueci a senha' },
-    { path:'user', component:User, title:'Meu perfil' }
+    { path:'perfil', component:User, title:'Meu perfil' }
 ];
