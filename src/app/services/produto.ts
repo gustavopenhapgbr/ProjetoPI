@@ -117,6 +117,15 @@ export class ProdutoService {
     }
   }
 
+  baixarEstoque(produto: Produto, tamanho: string, quantidade: number) {
+    switch (tamanho) {
+      case 'P': produto.estoqueP -= quantidade; break;
+      case 'M': produto.estoqueM -= quantidade; break;
+      case 'G': produto.estoqueG -= quantidade; break;
+      case 'GG': produto.estoqueGG -= quantidade; break;
+    }
+  }
+
   totalEstoque(produto: Produto): number {
     return produto.estoqueP + produto.estoqueM + produto.estoqueG + produto.estoqueGG;
   }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../model/usuario';
+import { CarrinhoService } from './carrinho';   
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class AuthService {
 
   usuarioLogado: string = '';
   adminLogado: boolean = false;
+  constructor(private carrinhoService: CarrinhoService) {}
 
   loginAdmin(email: string, senha: string): boolean {
     if (email === this.emailAdm && senha === this.senhaAdm) {
@@ -88,6 +90,7 @@ export class AuthService {
   sair() {
     this.usuarioLogado = '';
     this.adminLogado = false;
+    this.carrinhoService.limpar();
   }
 
   validarEmail(email: string): boolean {
