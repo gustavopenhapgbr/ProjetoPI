@@ -10,7 +10,7 @@ import { Produto } from '../../model/produto';
   styleUrl: './catalogo.css',
 })
 export class Catalogo implements OnInit {
-  
+  // Textos de cada categoria
   categorias = [
     { chave: 'camisetas', titulo: 'Camisetas', subtitulo: 'Detalhes que completam o seu estilo.' },
     { chave: 'calcas', titulo: 'Calças', subtitulo: 'Conforto e personalidade em todos os momentos.' },
@@ -26,6 +26,7 @@ export class Catalogo implements OnInit {
   constructor(private produtoService: ProdutoService, private router: Router) {}
 
   ngOnInit(): void {
+    
     let categoriaAtual = this.router.url.replace('/', '');
 
     for (let categoria of this.categorias) {
@@ -36,6 +37,11 @@ export class Catalogo implements OnInit {
     }
 
     this.produtos = this.produtoService.listarPorCategoria(categoriaAtual);
+  }
+
+  abrirProduto(produto: Produto) {
+    this.produtoService.idSelecionado = produto.id;
+    this.router.navigate(['/produto']);
   }
 
   formatarPreco(preco: number): string {

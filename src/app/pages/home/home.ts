@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Banner } from '../../components/banner/banner';
 import { Beneficios } from '../../components/beneficios/beneficios';
 import { Faixa } from '../../components/faixa/faixa';
@@ -15,7 +16,7 @@ import { Produto } from '../../model/produto';
 export class Home implements OnInit {
   produtosDestaque: Produto[] = [];
 
-  constructor(private produtoService: ProdutoService) {}
+  constructor(private produtoService: ProdutoService, private router: Router) {}
 
   ngOnInit(): void {
     for (let produto of this.produtoService.listar()) {
@@ -23,6 +24,11 @@ export class Home implements OnInit {
         this.produtosDestaque.push(produto);
       }
     }
+  }
+
+  abrirProduto(produto: Produto) {
+    this.produtoService.idSelecionado = produto.id;
+    this.router.navigate(['/produto']);
   }
 
   formatarPreco(preco: number): string {
