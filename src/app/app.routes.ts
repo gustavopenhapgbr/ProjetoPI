@@ -5,6 +5,7 @@ import { Register } from './pages/register/register';
 import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { User } from './pages/user/user';
 import { Catalogo } from './pages/catalogo/catalogo';
+import { Produto } from './pages/produto/produto';
 
 export const routes: Routes = [
     { path: '', component: Home, title: 'F.Company' },
@@ -17,4 +18,5 @@ export const routes: Routes = [
     { path: 'shorts', component: Catalogo, title: 'Shorts' },
     { path: 'conjuntos', component: Catalogo, title: 'Conjuntos' },
     { path: 'acessorios', component: Catalogo, title: 'Acessórios' },
+    { path: 'produto', component: Produto, title: 'Produto'  }
 ];
