@@ -36,6 +36,12 @@
             }
           </div>
 
+          <button type="button" class="adicionar"
+            [disabled]="tamanhoSelecionado === ''"
+            (click)="adicionarAoCarrinho()">
+            Adicionar ao carrinho <span>+</span>
+          </button>
+
           <div class="detalhes">
             <details open>
               <summary>Descrição <span>+</span></summary>
