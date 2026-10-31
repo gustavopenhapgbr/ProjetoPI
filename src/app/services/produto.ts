@@ -35,6 +35,7 @@ export class ProdutoService {
   ];
 
   proximoId: number = 26;
+  idSelecionado: number = 0;
 
   listar(): Produto[] {
     return this.produtos;
