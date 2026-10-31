@@ -42,7 +42,7 @@
 <section class="destaques">
   <div class="grade">
     @for (produto of produtosDestaque; track produto.id) {
-      <article class="card">
+      <article class="card" (click)="abrirProduto(produto)">
         <div class="visual">
           <img class="imagem" [src]="produto.imagem" [alt]="produto.nome" />
         </div>
