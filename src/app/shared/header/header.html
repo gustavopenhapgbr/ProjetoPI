@@ -3,10 +3,11 @@
     <a routerLink="/">F.Company</a>
   </div>
 
-  <!-- A busca será implementada na etapa do catálogo -->
   <div class="pesquisa">
-    <input type="text" placeholder="Pesquisar produto">
-    <span>⌕</span>
+    <input type="text" name="termo" placeholder="Pesquisar produto"
+      [(ngModel)]="termo"
+      (keyup.enter)="pesquisar()">
+    <span (click)="pesquisar()">⌕</span>
   </div>
 
   <div class="opcoes">
