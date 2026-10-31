@@ -7,6 +7,7 @@ import { User } from './pages/user/user';
 import { Catalogo } from './pages/catalogo/catalogo';
 import { PaginaProduto } from './pages/produto/produto';
 import { Pesquisa } from './pages/pesquisa/pesquisa';
+import { Carrinho } from './pages/carrinho/carrinho';
 
 
 export const routes: Routes = [
@@ -21,5 +22,6 @@ export const routes: Routes = [
     { path: 'conjuntos', component: Catalogo, title: 'Conjuntos' },
     { path: 'acessorios', component: Catalogo, title: 'Acessórios' },
     { path: 'produto', component: PaginaProduto, title: 'Produto'},
-    { path: 'pesquisa', component:Pesquisa, title: 'Pesquisa' }
+    { path: 'pesquisa', component:Pesquisa, title: 'Pesquisa' },
+    { path: 'carrinho', component: Carrinho, title: 'Carrinho' },
 ];
