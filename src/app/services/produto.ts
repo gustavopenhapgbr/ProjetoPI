@@ -36,6 +36,8 @@ export class ProdutoService {
 
   proximoId: number = 26;
   idSelecionado: number = 0;
+  termoPesquisa: string = '';
+  resultadosPesquisa: Produto[] = [];
 
   listar(): Produto[] {
     return this.produtos;
@@ -72,6 +74,11 @@ export class ProdutoService {
       }
     }
     return resultado;
+  }
+
+  pesquisar(termo: string) {
+    this.termoPesquisa = termo;
+    this.resultadosPesquisa = this.buscar(termo);
   }
 
   adicionar(produto: Produto) {
