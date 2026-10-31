@@ -1,1 +1,62 @@
-<p>produto works!</p>
+<main class="pagina-produto">
+  @if (produto) {
+    <section class="detalhe-produto">
+      <a class="voltar" routerLink="/">← Voltar para a loja</a>
+
+      <div class="conteudo-produto">
+        <div class="galeria">
+          <div class="imagem-principal">
+            <img [src]="produto.imagem" [alt]="produto.nome" />
+          </div>
+        </div>
+
+        <aside class="informacoes">
+          <p class="categoria">{{ produto.categoria }}</p>
+          <h1>{{ produto.nome }}</h1>
+          <p class="preco">{{ formatarPreco(produto.preco) }}</p>
+
+          <p class="estoque">
+            Disponibilidade:
+            @if (tamanhoSelecionado !== '') {
+              <strong>{{ estoqueDoTamanho(tamanhoSelecionado) }} unidades no tamanho {{ tamanhoSelecionado }}</strong>
+            } @else {
+              <strong>Esgotado</strong>
+            }
+          </p>
+
+          <div class="seletor-tamanho">
+            <span class="tamanho-label">Tamanho</span>
+            @for (tamanho of tamanhos; track tamanho) {
+              <button type="button" class="tamanho"
+                [class.selecionado]="tamanhoSelecionado === tamanho"
+                [disabled]="estoqueDoTamanho(tamanho) === 0"
+                (click)="selecionarTamanho(tamanho)">
+                {{ tamanho }}
+              </button>
+            }
+          </div>
+
+          <div class="detalhes">
+            <details open>
+              <summary>Descrição <span>+</span></summary>
+              <p>{{ produto.descricao }}</p>
+            </details>
+            <details>
+              <summary>Tabela de medidas <span>+</span></summary>
+              <p>Consulte nossa equipe para encontrar o tamanho ideal.</p>
+            </details>
+            <details>
+              <summary>Informações do produto <span>+</span></summary>
+              <p>Design urbano, confortável e pensado para o seu estilo.</p>
+            </details>
+          </div>
+        </aside>
+      </div>
+    </section>
+  } @else {
+    <section class="detalhe-produto estado-vazio">
+      <p>Produto não encontrado.</p>
+      <a class="botao-voltar" routerLink="/">Voltar para a loja</a>
+    </section>
+  }
+</main>
