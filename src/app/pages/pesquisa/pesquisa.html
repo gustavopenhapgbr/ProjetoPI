@@ -1,0 +1,42 @@
+<section class="pagina-pesquisa">
+  <div class="trilha">
+    <a routerLink="/">Início</a>
+    <span>/</span>
+    <strong>Pesquisa</strong>
+  </div>
+
+  <div class="cabecalho-pesquisa">
+    <span class="eyebrow">Resultados da busca</span>
+    <h1>"{{ produtoService.termoPesquisa }}"</h1>
+    <p>Confira o que encontramos para a sua pesquisa.</p>
+  </div>
+
+  @if (produtoService.resultadosPesquisa.length > 0) {
+    <div class="barra-categoria">
+      <span>{{ produtoService.resultadosPesquisa.length }} produtos</span>
+      <span class="linha"></span>
+    </div>
+
+    <div class="grade">
+      @for (produto of produtoService.resultadosPesquisa; track produto.id) {
+        <article class="card" (click)="abrirProduto(produto)">
+          <div class="visual">
+            <img class="imagem" [src]="produto.imagem" [alt]="produto.nome" />
+          </div>
+          <div class="conteudo">
+            <span class="etiqueta">{{ produto.categoria }}</span>
+            <h2 class="nome">{{ produto.nome }}</h2>
+            <p class="descricao">{{ produto.descricao }}</p>
+            <strong class="preco">{{ formatarPreco(produto.preco) }}</strong>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="nao-encontrado">
+      <p>Produto não encontrado.</p>
+      <span>Não achamos nada para "{{ produtoService.termoPesquisa }}". Tente outra palavra.</span>
+      <a routerLink="/">Voltar para a página inicial</a>
+    </div>
+  }
+</section>
