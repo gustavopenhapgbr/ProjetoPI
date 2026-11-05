@@ -8,6 +8,7 @@ import { Catalogo } from './pages/catalogo/catalogo';
 import { PaginaProduto } from './pages/produto/produto';
 import { Pesquisa } from './pages/pesquisa/pesquisa';
 import { Admin } from './pages/admin/admin';
+import { Carrinho } from './pages/carrinho/carrinho';
 
 
 export const routes: Routes = [
@@ -23,5 +24,7 @@ export const routes: Routes = [
     { path: 'acessorios', component: Catalogo, title: 'Acessórios' },
     { path: 'produto', component: PaginaProduto, title: 'Produto'},
     { path: 'pesquisa', component:Pesquisa, title: 'Pesquisa' },
-    { path: 'admin', component: Admin, title: 'Painel Administrativo' }
+    { path: 'admin', component: Admin, title: 'Painel Administrativo' },
+    {path: 'carrinho', component: Carrinho, title: 'carrinho'}
+
 ];
