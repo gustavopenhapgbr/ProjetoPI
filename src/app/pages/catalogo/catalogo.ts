@@ -10,7 +10,7 @@ import { Produto } from '../../model/produto';
   styleUrl: './catalogo.css',
 })
 export class Catalogo implements OnInit {
-  // Textos de cada categoria
+
   categorias = [
     { chave: 'camisetas', titulo: 'Camisetas', subtitulo: 'Detalhes que completam o seu estilo.' },
     { chave: 'calcas', titulo: 'Calças', subtitulo: 'Conforto e personalidade em todos os momentos.' },
