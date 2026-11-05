@@ -1,28 +1,29 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth/auth';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-user',
-  imports: [RouterLink, FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './user.html',
   styleUrl: './user.css',
 })
 
 export class User {
-  private auth = inject(AuthService);
-  private router = inject(Router);
+  email: string = '';
 
-  email = this.auth.emailUsuario();
+  editandoEmail: boolean = false;
+  novoEmail: string = '';
+  erroEmail: string = '';
 
-  editandoEmail = false;
-  novoEmail = '';
-  erroEmail = '';
+  editandoSenha: boolean = false;
+  novaSenha: string = '';
+  erroSenha: string = '';
 
-  editandoSenha = false;
-  novaSenha = '';
-  erroSenha = '';
+  constructor(public auth: AuthService, private router: Router) {
+    this.email = this.auth.usuarioLogado;
+  }
 
   editarEmail() {
     this.novoEmail = this.email;
@@ -31,14 +32,18 @@ export class User {
   }
 
   salvarEmail() {
-    const valido = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.novoEmail);
-    if (!valido) {
+    if (!this.auth.validarEmail(this.novoEmail)) {
       this.erroEmail = 'Digite um e-mail válido.';
-      return;
+    } else if (this.novoEmail !== this.email && this.auth.contaExiste(this.novoEmail)) {
+      this.erroEmail = 'Já existe uma conta com esse e-mail.';
+    } else {
+      this.auth.alterarEmail(this.novoEmail);
+      this.email = this.novoEmail;
+      this.editandoEmail = false;
     }
+  }
 
-    this.auth.alterarEmail(this.novoEmail);
-    this.email = this.novoEmail;
+  cancelarEmail() {
     this.editandoEmail = false;
   }
 
@@ -51,12 +56,15 @@ export class User {
   salvarSenha() {
     if (this.novaSenha.length < 6) {
       this.erroSenha = 'A senha precisa ter pelo menos 6 caracteres.';
-      return;
+    } else {
+      this.auth.alterarSenha(this.novaSenha);
+      this.editandoSenha = false;
+      alert('Senha alterada.');
     }
+  }
 
-    this.auth.alterarSenha(this.novaSenha);
+  cancelarSenha() {
     this.editandoSenha = false;
-    alert('Senha alterada.');
   }
 
   sair() {
@@ -65,11 +73,11 @@ export class User {
   }
 
   excluirConta() {
-    const confirmou = confirm('Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.');
-    if (!confirmou) return;
-
-    this.auth.excluirConta();
-    alert('Conta excluída.');
-    this.router.navigate(['/']);
+    let confirmou = confirm('Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.');
+    if (confirmou) {
+      this.auth.excluirConta();
+      alert('Conta excluída.');
+      this.router.navigate(['/']);
+    }
   }
 }

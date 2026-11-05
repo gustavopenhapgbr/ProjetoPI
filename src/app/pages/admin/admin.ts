@@ -1,91 +1,129 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth';
-import { ProdutoService, Produto } from '../../services/produto/produto';
-
-export interface GrupoCategoria {
-  categoria: string;
-  quantidade: number;
-  precoMin: number;
-  precoMax: number;
-  emDestaque: string;
-  produtos: Produto[];
-}
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth';
+import { ProdutoService } from '../../services/produto';
+import { Produto } from '../../model/produto';
+import { GrupoCategoria } from '../../model/grupo-categoria';
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })
 export class Admin implements OnInit {
-  produtos: Produto[] = [];
-  grupos: GrupoCategoria[] = [];
-  categoriasAbertas = new Set<string>();
-  categorias = ['camisetas', 'calcas', 'shorts', 'conjuntos', 'acessorios'];
+  categorias: string[] = ['camisetas', 'calcas', 'shorts', 'conjuntos', 'acessorios'];
 
+  imagens: string[] = [
+    '/images/camiseta_1_cinza_claro.png',
+    '/images/camiseta_2_cinza_escuro.png',
+    '/images/camiseta_3_preta.png',
+    '/images/camiseta_4_off_white.png',
+    '/images/camiseta_5_azul_petroleo.png',
+    '/images/camisa_6_Azulbb.jpg',
+    '/images/calca_1_cinza_logo_lateral.png',
+    '/images/calca_2_preta_guaxinim_duplo.png',
+    '/images/calca_3_preta_grafite.png',
+    '/images/calca_4_cinza_guaxinim_roxo.png',
+    '/images/calca_5_preta_urban_street.png',
+    '/images/calca_6_azulbebe.png',
+    '/images/shorts_1_moletom_cinza.png',
+    '/images/shorts_2_preto_script_lateral.png',
+    '/images/shorts_3_cinza_claro_script.png',
+    '/images/shorts_4_preto_cordao_branco.png',
+    '/images/shorts_5_preto_logo_lateral.jpg',
+    '/images/shorts_6_cinza_cos_preto.png',
+    '/images/conjunto_azul.png',
+    '/images/conjunto_bege.png',
+    '/images/conjunto_cinza.png',
+    '/images/conjunto_off-white.png',
+    '/images/conjunto_verde.png',
+    '/images/conjunto_vinho.png',
+    '/images/bolsa.png',
+    '/images/bone.png',
+    '/images/cordao.png',
+    '/images/garrafa.png',
+    '/images/gorro.png',
+    '/images/isqueiro.png'
+  ];
+
+  grupos: GrupoCategoria[] = [];
   produtoEmEdicao: Produto = this.produtoVazio();
-  editando = false;
+  editando: boolean = false;
 
   constructor(
-    private produtoService: ProdutoService,
-    private auth: AuthService,
-    private router: Router,
+    public auth: AuthService,
+    public produtoService: ProdutoService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.carregarProdutos();
+    this.montarGrupos();
   }
 
-  sair(): void {
+  sair() {
     this.auth.sair();
     this.router.navigate(['/']);
   }
 
-  carregarProdutos(): void {
-    this.produtos = this.produtoService.listar();
-    this.agruparPorCategoria();
-  }
+  montarGrupos() {
 
-  private agruparPorCategoria(): void {
-    const mapa = new Map<string, Produto[]>();
-    for (const produto of this.produtos) {
-      const lista = mapa.get(produto.categoria) ?? [];
-      lista.push(produto);
-      mapa.set(produto.categoria, lista);
+    let abertas: string[] = [];
+    for (let grupo of this.grupos) {
+      if (grupo.aberto) {
+        abertas.push(grupo.categoria);
+      }
     }
 
-    this.grupos = Array.from(mapa, ([categoria, produtos]) => {
-      const precos = produtos.map((p) => p.preco);
-      return {
-        categoria,
-        quantidade: produtos.length,
-        precoMin: Math.min(...precos),
-        precoMax: Math.max(...precos),
-        emDestaque: produtos.find((p) => p.destaque)?.nome ?? '—',
-        produtos,
-      };
-    });
-  }
+    this.grupos = [];
 
-  alternarCategoria(categoria: string): void {
-    if (this.categoriasAbertas.has(categoria)) {
-      this.categoriasAbertas.delete(categoria);
-    } else {
-      this.categoriasAbertas.add(categoria);
+    for (let categoria of this.categorias) {
+      let produtos = this.produtoService.listarPorCategoria(categoria);
+
+      if (produtos.length > 0) {
+        let grupo: GrupoCategoria = {
+          categoria: categoria,
+          quantidade: produtos.length,
+          precoMin: produtos[0].preco,
+          precoMax: produtos[0].preco,
+          emDestaque: '—',
+          produtos: produtos,
+          aberto: abertas.includes(categoria)
+        };
+
+        for (let produto of produtos) {
+          if (produto.preco < grupo.precoMin) {
+            grupo.precoMin = produto.preco;
+          }
+          if (produto.preco > grupo.precoMax) {
+            grupo.precoMax = produto.preco;
+          }
+          if (produto.destaque) {
+            grupo.emDestaque = produto.nome;
+          }
+        }
+
+        this.grupos.push(grupo);
+      }
     }
   }
 
-  formatarPreco(grupo: GrupoCategoria): string {
-    const min = 'R$ ' + grupo.precoMin.toFixed(2);
-    const max = 'R$ ' + grupo.precoMax.toFixed(2);
-    return grupo.precoMin === grupo.precoMax ? min : min + ' – ' + max;
+  alternarCategoria(grupo: GrupoCategoria) {
+    grupo.aberto = !grupo.aberto;
   }
 
-  totalEstoque(produto: Produto): number {
-    return produto.estoqueS + produto.estoqueM + produto.estoqueL + produto.estoqueXL;
+  formatarFaixaPreco(grupo: GrupoCategoria): string {
+    let min = this.formatarPreco(grupo.precoMin);
+    let max = this.formatarPreco(grupo.precoMax);
+    if (grupo.precoMin === grupo.precoMax) {
+      return min;
+    }
+    return min + ' – ' + max;
+  }
+
+  formatarPreco(preco: number): string {
+    return 'R$ ' + preco.toFixed(2).replace('.', ',');
   }
 
   produtoVazio(): Produto {
@@ -97,90 +135,71 @@ export class Admin implements OnInit {
       imagem: '',
       descricao: '',
       destaque: false,
-      estoqueS: 0,
+      estoqueP: 0,
       estoqueM: 0,
-      estoqueL: 0,
-      estoqueXL: 0,
+      estoqueG: 0,
+      estoqueGG: 0
     };
   }
 
-  onImagemSelecionada(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const arquivo = input.files?.[0];
-
-    if (!arquivo) {
-      this.produtoEmEdicao.imagem = '';
-      return;
-    }
-
-    if (!arquivo.type.startsWith('image/')) {
-      alert('Selecione uma imagem válida (PNG, JPG ou WEBP).');
-      input.value = '';
-      this.produtoEmEdicao.imagem = '';
-      return;
-    }
-
-    const leitor = new FileReader();
-    leitor.onload = () => {
-      this.produtoEmEdicao.imagem = typeof leitor.result === 'string' ? leitor.result : '';
-    };
-    leitor.readAsDataURL(arquivo);
+  quantidadeValida(quantidade: number): boolean {
+    return quantidade >= 0 && quantidade % 1 === 0;
   }
 
-    salvarProduto(): void {
-    if (!this.produtoEmEdicao.nome.trim() || this.produtoEmEdicao.preco <= 0) {
+  salvarProduto() {
+    let p = this.produtoEmEdicao;
+
+    p.preco = Number(p.preco);
+    p.estoqueP = Number(p.estoqueP);
+    p.estoqueM = Number(p.estoqueM);
+    p.estoqueG = Number(p.estoqueG);
+    p.estoqueGG = Number(p.estoqueGG);
+
+    if (p.nome.trim() === '' || p.preco <= 0) {
       alert('Preencha ao menos o nome e um preço válido.');
-      return;
-    }
-
-        const p = this.produtoEmEdicao;
-
-    p.estoqueS = Number(p.estoqueS ?? 0);
-    p.estoqueM = Number(p.estoqueM ?? 0);
-    p.estoqueL = Number(p.estoqueL ?? 0);
-    p.estoqueXL = Number(p.estoqueXL ?? 0);
-
-    const quantidades = [p.estoqueS, p.estoqueM, p.estoqueL, p.estoqueXL];
-    const invalido = quantidades.some((q) => !Number.isInteger(q) || q < 0);
-
-    if (invalido) {
+    } else if (!this.quantidadeValida(p.estoqueP) || !this.quantidadeValida(p.estoqueM) ||
+               !this.quantidadeValida(p.estoqueG) || !this.quantidadeValida(p.estoqueGG)) {
       alert('As quantidades de estoque devem ser números inteiros iguais ou maiores que 0.');
-      return;
-    }
-
-    const total = p.estoqueS + p.estoqueM + p.estoqueL + p.estoqueXL;
-
-    if (total === 0) {
+    } else if (this.produtoService.totalEstoque(p) === 0) {
       alert('Informe a quantidade em estoque de pelo menos um tamanho.');
-      return;
-    }
-
-    if (this.editando) {
-      this.produtoService.atualizar(this.produtoEmEdicao);
     } else {
-      const { id, ...dadosDoProduto } = this.produtoEmEdicao;
-      this.produtoService.adicionar(dadosDoProduto);
+      if (this.editando) {
+        this.produtoService.atualizar(p);
+      } else {
+        this.produtoService.adicionar(p);
+      }
+      this.cancelarEdicao();
+      this.montarGrupos();
     }
-
-    this.cancelarEdicao();
-    this.carregarProdutos();
   }
 
-  editarProduto(produto: Produto): void {
-    this.produtoEmEdicao = { ...produto };
+  editarProduto(produto: Produto) {
+    this.produtoEmEdicao = {
+      id: produto.id,
+      nome: produto.nome,
+      preco: produto.preco,
+      categoria: produto.categoria,
+      imagem: produto.imagem,
+      descricao: produto.descricao,
+      destaque: produto.destaque,
+      estoqueP: produto.estoqueP,
+      estoqueM: produto.estoqueM,
+      estoqueG: produto.estoqueG,
+      estoqueGG: produto.estoqueGG
+    };
     this.editando = true;
   }
 
-  cancelarEdicao(): void {
+  cancelarEdicao() {
     this.produtoEmEdicao = this.produtoVazio();
     this.editando = false;
   }
 
-  removerProduto(id: number): void {
-    const confirmou = confirm('Deseja remover este produto?');
+  removerProduto(id: number) {
+    let confirmou = confirm('Deseja remover este produto?');
     if (confirmou) {
       this.produtoService.remover(id);
-      this.carregarProdutos();
+      this.montarGrupos();
     }
   }
 }

@@ -35,25 +35,26 @@
 </div>
 
 <div class="section-titulo">
-    <h1 class="titulo">Produtos em destaque</h1>
-    <p>Selecionados a dedo.</p>
+  <h1 class="titulo">Produtos em destaque</h1>
+  <p>Selecionados a dedo.</p>
 </div>
 
 <section class="destaques">
-    @if (produtosDestaque.length > 0) {
-        <div class="barra-categoria">
-            <span>{{ produtosDestaque.length }} produto{{ produtosDestaque.length === 1 ? '' : 's' }}</span>
-            <span class="linha"></span>
+  <div class="grade">
+    @for (produto of produtosDestaque; track produto.id) {
+      <article class="card" (click)="abrirProduto(produto)">
+        <div class="visual">
+          <img class="imagem" [src]="produto.imagem" [alt]="produto.nome" />
         </div>
-
-        <div class="grade">
-            @for (produto of produtosDestaque; track produto.id) {
-                <app-card (click)="irPageProduto(produto)" [produto]="produto"></app-card>
-            }
+        <div class="conteudo">
+          <span class="etiqueta">{{ produto.categoria }}</span>
+          <h2 class="nome">{{ produto.nome }}</h2>
+          <p class="descricao">{{ produto.descricao }}</p>
+          <strong class="preco">{{ formatarPreco(produto.preco) }}</strong>
         </div>
-    } @else {
-        <p class="sem-produtos">Nenhum produto cadastrado nesta categoria.</p>
+      </article>
     }
+  </div>
 </section>
 
 <app-depoimentos></app-depoimentos>

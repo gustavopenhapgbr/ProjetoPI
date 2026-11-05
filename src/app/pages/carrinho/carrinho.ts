@@ -1,98 +1,37 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { CarrinhoService, ItemCarrinho } from '../../services/carrinho/carrinho';
-import { ProdutoService } from '../../services/produto/produto';
+import { CarrinhoService } from '../../services/carrinho';
+import { AuthService } from '../../services/auth';
+import { ProdutoService } from '../../services/produto';
+import { ProdutoCarrinho } from '../../model/produto-carrinho';
 
 @Component({
   selector: 'app-carrinho',
-  imports: [RouterLink, CurrencyPipe],
+  imports: [RouterLink],
   templateUrl: './carrinho.html',
   styleUrl: './carrinho.css',
 })
-export class Carrinho implements OnInit {
-  protected carrinhoService = inject(CarrinhoService);
-  private produtoService = inject(ProdutoService);
+export class Carrinho {
 
+  constructor(
+    public carrinhoService: CarrinhoService,
+    public auth: AuthService,
+    private produtoService: ProdutoService
+  ) {}
 
-
-
-
-
-  ngOnInit() {
-    this.carrinhoService.carregarCarrinho();
+  estoqueDisponivel(item: ProdutoCarrinho): number {
+    return this.produtoService.estoqueDoTamanho(item.produto, item.tamanho);
   }
-
-
-
-
-
-
-  estoqueDisponivel(item: ItemCarrinho): number {
-    const atual = this.produtoService.buscarPorId(item.produto.id);
-    return atual ? this.produtoService.estoqueDe(atual, item.tamanho) : 0;
-  }
-
-
-
-
-
-
-  alterarQtd(index: number, delta: number) {
-    const item = this.carrinhoService.itens()[index];
-    const disponivel = this.estoqueDisponivel(item);
-
-    if (delta > 0 && item.quantidade + delta > disponivel) {
-      alert(`Só há ${disponivel} unidade(s) disponível(is) no tamanho ${item.tamanho}.`);
-      return;
-    }
-
-    this.carrinhoService.alterarQuantidade(index, delta);
-  }
-
-
-
-
-
-
-  remover(index: number) {
-    this.carrinhoService.remover(index);
-  }
-
-
-
-
-
 
   finalizarCompra() {
-    const itens = this.carrinhoService.itens();
-    if (itens.length === 0) return;
-
-    const semEstoque = itens.find((item) => item.quantidade > this.estoqueDisponivel(item));
-    if (semEstoque) {
-      alert(
-        `Estoque insuficiente para "${semEstoque.produto.nome}" (${semEstoque.tamanho}). ` +
-        `Disponível: ${this.estoqueDisponivel(semEstoque)}.`
-      );
-      return;
+    let confirmou = confirm('Deseja finalizar a compra?');
+    if (confirmou) {
+      this.carrinhoService.finalizarCompra();
+      alert('Compra finalizada! Obrigado por comprar na F.Company.');
     }
-
-    itens.forEach((item) =>
-      this.produtoService.baixarEstoque(item.produto.id, item.tamanho, item.quantidade)
-    );
-
-    alert('Compra realizada com sucesso!');
-    this.carrinhoService.finalizarCompra();
   }
 
-
-
-
-
-
-  calcularSubtotal(): number {
-    return this.carrinhoService
-      .itens()
-      .reduce((total, item) => total + item.produto.preco * item.quantidade, 0);
+  formatarPreco(preco: number): string {
+    return 'R$ ' + preco.toFixed(2).replace('.', ',');
   }
 }

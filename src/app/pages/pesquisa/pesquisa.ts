@@ -1,24 +1,24 @@
-import { Component, computed, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
-import { ProdutoService } from '../../services/produto/produto';
-import { Card } from '../../component/card/card';
+import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { ProdutoService } from '../../services/produto';
+import { Produto } from '../../model/produto';
 
 @Component({
   selector: 'app-pesquisa',
-  imports: [RouterLink, Card],
+  imports: [RouterLink],
   templateUrl: './pesquisa.html',
   styleUrl: './pesquisa.css',
 })
 export class Pesquisa {
-  private route = inject(ActivatedRoute);
-  private produtoService = inject(ProdutoService);
 
-  termo = toSignal(
-    this.route.queryParamMap.pipe(map((p) => p.get('q') ?? '')),
-    { initialValue: '' }
-  );
+  constructor(public produtoService: ProdutoService, private router: Router) {}
 
-  resultados = computed(() => this.produtoService.buscar(this.termo()));
+  abrirProduto(produto: Produto) {
+    this.produtoService.idSelecionado = produto.id;
+    this.router.navigate(['/produto']);
+  }
+
+  formatarPreco(preco: number): string {
+    return 'R$ ' + preco.toFixed(2).replace('.', ',');
+  }
 }

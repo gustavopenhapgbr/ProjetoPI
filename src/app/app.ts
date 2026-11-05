@@ -1,8 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './component/header/header';
-import { Nav } from './component/nav/nav';
-import { Footer } from './component/footer/footer';
+import { Footer } from './shared/footer/footer';
+import { Nav } from './shared/nav/nav';
+import { Header } from './shared/header/header';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +10,4 @@ import { Footer } from './component/footer/footer';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('ProjetoPI');
-}
+export class App { }

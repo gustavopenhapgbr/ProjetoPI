@@ -58,7 +58,8 @@ form label {
   outline: none;
   transition: border-color .2s, box-shadow .2s;
 }
-/* sombra de quando seleciona o botão para escrever o login e senha*/
+
+
 .input-simples:focus {
   border-color: #42146d;
   box-shadow: 0 0 0 3px rgba(66, 20, 109);
@@ -83,7 +84,7 @@ form label {
   cursor: pointer;
   transition: background-color .2s, transform .1s;
 }
-/*quando passamos o cursor em cima troca de cor do botão entar*/
+
 .input-submeter:hover  { background-color: #a740eb; }
 .input-submeter:active { transform: scale(.98); }
 
@@ -99,4 +100,11 @@ form label {
   color: #fff;
   text-align: center;
   margin-top: 20px;
+}
+
+.input-submeter:disabled {
+  background-color: #94a3b8;
+  color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.7;
 }

@@ -1,33 +1,37 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Beneficios } from '../../component/beneficios/beneficios';
-import { Banner } from '../../component/banner/banner';
-import { Faixa } from '../../component/faixa/faixa';
-import { Depoimentos } from '../../component/depoimentos/depoimentos';
-import { Card } from '../../component/card/card';
-import { Produto, ProdutoService } from '../../services/produto/produto';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Banner } from '../../components/banner/banner';
+import { Beneficios } from '../../components/beneficios/beneficios';
+import { Faixa } from '../../components/faixa/faixa';
+import { Depoimentos } from '../../components/depoimentos/depoimentos';
+import { ProdutoService } from '../../services/produto';
+import { Produto } from '../../model/produto';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, Banner, Beneficios, Faixa, Depoimentos, Card],
+  imports: [Banner, Beneficios, Faixa, Depoimentos],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-
-export class Home {
+export class Home implements OnInit {
   produtosDestaque: Produto[] = [];
 
-  constructor(
-    private router: Router,
-    private produtoService: ProdutoService,
-  ) {}
+  constructor(private produtoService: ProdutoService, private router: Router) {}
 
   ngOnInit(): void {
-    this.produtosDestaque = this.produtoService.listar().filter((produto) => produto.destaque);
+    for (let produto of this.produtoService.listar()) {
+      if (produto.destaque) {
+        this.produtosDestaque.push(produto);
+      }
+    }
   }
 
-  irPageProduto(produto: Produto): void {
-    this.router.navigate(['/produto', produto.id]);
+  abrirProduto(produto: Produto) {
+    this.produtoService.idSelecionado = produto.id;
+    this.router.navigate(['/produto']);
+  }
+
+  formatarPreco(preco: number): string {
+    return 'R$ ' + preco.toFixed(2).replace('.', ',');
   }
 }

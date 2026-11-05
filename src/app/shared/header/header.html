@@ -1,0 +1,43 @@
+<header>
+  <div class="logo">
+    <a routerLink="/">F.Company</a>
+  </div>
+
+  <div class="pesquisa">
+    <input type="text" name="termo" placeholder="Pesquisar produto"
+      [(ngModel)]="termo"
+      (keyup.enter)="pesquisar()">
+    <span (click)="pesquisar()">⌕</span>
+  </div>
+
+  <div class="opcoes">
+    <div class="fale-conosco">
+      <img src="/images/faleConosco.jpg" alt="Fale Conosco">
+      <span>Fale Conosco</span>
+    </div>
+
+    <a class="carrinho-button" routerLink="/carrinho">
+      <img class="icone" src="/images/carrinho.png" alt="Carrinho">
+    </a>
+
+    <div class="usuario">
+      <div class="usuario-link">
+        <img src="/images/usuario.png" class="icone" alt="Usuário">
+      </div>
+
+      <div class="dropdown">
+        @if (auth.adminLogado) {
+          <a routerLink="/admin">Painel Administrativo</a>
+        }
+
+        @if (auth.estaLogado()) {
+          <a routerLink="/perfil">Minha conta</a>
+          <a (click)="sair()">Sair</a>
+        } @else {
+          <a routerLink="/login">Entrar</a>
+          <a routerLink="/register">Criar conta</a>
+        }
+      </div>
+    </div>
+  </div>
+</header>

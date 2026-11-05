@@ -1,34 +1,27 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { Camisetas } from './pages/produtos/camisetas/camisetas';
-import { Calcas } from './pages/produtos/calcas/calcas';
-import { Shorts } from './pages/produtos/shorts/shorts';
-import { Conjuntos } from './pages/produtos/conjuntos/conjuntos';
-import { Acessorios } from './pages/produtos/acessorios/acessorios';
 import { Login } from './pages/login/login';
-import { Admin } from './pages/admin/admin';
-import { adminGuard } from './services/auth/admin-guard';
-import { PaginaProduto } from './pages/pagina-produto/pagina-produto';
-import { Pesquisa } from './pages/pesquisa/pesquisa';
-import { Register } from './component/register/register';
-import { ForgotPassword } from './component/forgot-password/forgot-password';
+import { Register } from './pages/register/register';
+import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { User } from './pages/user/user';
-import { Carrinho } from './pages/carrinho/carrinho';
-import { userGuard } from './services/auth/user-guard';
+import { Catalogo } from './pages/catalogo/catalogo';
+import { PaginaProduto } from './pages/produto/produto';
+import { Pesquisa } from './pages/pesquisa/pesquisa';
+import { Admin } from './pages/admin/admin';
+
 
 export const routes: Routes = [
-    {path: '', component: Home},
-    {path: 'camisetas', component: Camisetas},
-    {path: 'calcas', component: Calcas},
-    {path: 'shorts', component: Shorts},
-    {path: 'conjuntos', component: Conjuntos},
-    {path: 'acessorios', component: Acessorios},
-    {path: 'login', component: Login},
-    {path: 'register', component: Register},
-    {path: 'forgot-password', component: ForgotPassword},
-    {path: 'perfil', component: User, canActivate: [userGuard]},
-    {path: 'admin', component: Admin, canActivate: [adminGuard]},
-    {path: 'produto/:id', component: PaginaProduto},
-    {path: 'pesquisa', component: Pesquisa }, 
-    {path: 'carrinho', component: Carrinho }, 
+    { path: '', component: Home, title: 'F.Company' },
+    { path: 'login', component: Login, title: 'Login' },
+    { path: 'register', component: Register, title: 'Criar conta' },
+    { path: 'forgot-password', component: ForgotPassword, title: 'Esqueci a senha' },
+    { path: 'perfil', component: User, title: 'Meu perfil' },
+    { path: 'camisetas', component: Catalogo, title: 'Camisetas' },
+    { path: 'calcas', component: Catalogo, title: 'Calças' },
+    { path: 'shorts', component: Catalogo, title: 'Shorts' },
+    { path: 'conjuntos', component: Catalogo, title: 'Conjuntos' },
+    { path: 'acessorios', component: Catalogo, title: 'Acessórios' },
+    { path: 'produto', component: PaginaProduto, title: 'Produto'},
+    { path: 'pesquisa', component:Pesquisa, title: 'Pesquisa' },
+    { path: 'admin', component: Admin, title: 'Painel Administrativo' }
 ];

@@ -1,24 +1,33 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth/auth';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
-  email = '';
-  senha = '';
+  email: string = '';
+  senha: string = '';
+  botaoDesabilitado: boolean = true;
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router) {}
 
-  entrar(): void {
-    if (this.auth.entrar(this.email, this.senha)) {
+  validarFormulario() {
+    if (this.email.trim() !== '' && this.senha.trim() !== '') {
+      this.botaoDesabilitado = false;
+    } else {
+      this.botaoDesabilitado = true;
+    }
+  }
+
+  entrar() {
+    if (this.auth.loginAdmin(this.email, this.senha)) {
       this.router.navigate(['/admin']);
-    } else if (this.auth.entrarUsuario(this.email, this.senha)) {
+    } else if (this.auth.loginUsuario(this.email, this.senha)) {
       this.router.navigate(['/']);
     } else if (!this.auth.contaExiste(this.email)) {
       alert('Não existe uma conta com esse e-mail.');
