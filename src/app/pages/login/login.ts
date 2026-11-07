@@ -14,7 +14,7 @@ export class Login {
   senha: string = '';
   botaoDesabilitado: boolean = true;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) { }
 
   validarFormulario() {
     if (this.email.trim() !== '' && this.senha.trim() !== '') {
@@ -27,12 +27,31 @@ export class Login {
   entrar() {
     if (this.auth.loginAdmin(this.email, this.senha)) {
       this.router.navigate(['/admin']);
-    } else if (this.auth.loginUsuario(this.email, this.senha)) {
-      this.router.navigate(['/']);
-    } else if (!this.auth.contaExiste(this.email)) {
-      alert('Não existe uma conta com esse e-mail.');
-    } else {
-      alert('Senha incorreta.');
+      return;
     }
+
+    this.auth.listar().subscribe({
+      next: (usuarios) => {
+        let emailExiste = false;
+
+        for (let usuario of usuarios) {
+          if (usuario.email === this.email) {
+            emailExiste = true;
+            if (usuario.senha === this.senha) {
+              this.auth.registrarLogin(usuario);
+              this.router.navigate(['/']);
+              return;
+            }
+          }
+        }
+
+        if (emailExiste) {
+          alert('Senha incorreta.');
+        } else {
+          alert('Não existe uma conta com esse e-mail.');
+        }
+      },
+      error: () => alert('Deu erro ')
+    });
   }
 }

@@ -15,7 +15,7 @@ export class Register {
   confirmarSenha: string = '';
   erro: string = '';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) { }
 
   cadastrar() {
     if (this.email.trim() === '') {
@@ -30,13 +30,37 @@ export class Register {
       this.erro = 'Confirme sua senha.';
     } else if (this.senha !== this.confirmarSenha) {
       this.erro = 'As senhas não são iguais.';
-    } else if (this.auth.contaExiste(this.email)) {
-      this.erro = 'Já existe uma conta com esse e-mail.';
     } else {
       this.erro = '';
-      this.auth.cadastrar(this.email, this.senha);
-      alert('Conta criada! Bem-vindo à F.Company.');
-      this.router.navigate(['/']);
+      this.verificarEmailECadastrar();
     }
+  }
+
+  verificarEmailECadastrar() {
+    if (this.email === this.auth.emailAdm) {
+      this.erro = 'Já existe uma conta com esse e-mail.';
+      return;
+    }
+
+    this.auth.listar().subscribe({
+      next: (usuarios) => {
+        for (let usuario of usuarios) {
+          if (usuario.email === this.email) {
+            this.erro = 'Já existe uma conta com esse e-mail.';
+            return;
+          }
+        }
+
+        this.auth.incluir({ email: this.email, senha: this.senha }).subscribe({
+          next: (usuarioCriado) => {
+            this.auth.registrarLogin(usuarioCriado);
+            alert('Conta criada! Bem-vindo à F.Company.');
+            this.router.navigate(['/']);
+          },
+          error: () => alert('Erro ao criar a conta.')
+        });
+      },
+      error: () => alert('Deu erro')
+    });
   }
 }

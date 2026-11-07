@@ -1,94 +1,74 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../model/usuario';
-import { CarrinhoService } from './carrinho';   
+import { CarrinhoService } from './carrinho';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
 
+  // cria Api de usuarios para ser utilizada
+  private API = 'http://localhost:3000/usuarios';
+
   // login do adm
   emailAdm: string = 'admin@gmail.com';
   senhaAdm: string = 'adm123';
 
-  usuarios: Usuario[] = [
-    { email: 'cliente@gmail.com', senha: 'cliente123456' }
-  ];
-
-  usuarioLogado: string = '';
+  usuarioLogado: Usuario | null = null; //Devolve usuario inteiro ou vazio
   adminLogado: boolean = false;
-  constructor(private carrinhoService: CarrinhoService) {}
+  constructor(private http: HttpClient, private carrinhoService: CarrinhoService) { }
+
+  // métodos
+
+  listar(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.API); // this api indica onde vai o endereço onde a requisição vai ser enviada. 
+  }
+
+  incluir(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(this.API, usuario);
+  }
+
+  editar(usuario: Usuario): Observable<Usuario>{
+    return this.http.put<Usuario>(`${this.API}/${usuario.id}`, usuario);
+  }
+
+  excluir(id:String): Observable<Usuario>{
+    return this.http.delete<Usuario>(`${this.API}/${id}`);
+  }
+
+  registrarLogin(usuario:Usuario){
+    this.usuarioLogado = usuario;    // Registra o usuario que está logado
+  }
 
   loginAdmin(email: string, senha: string): boolean {
     if (email === this.emailAdm && senha === this.senhaAdm) {
       this.adminLogado = true;
-      this.usuarioLogado = email;
       return true;
     }
     return false;
   }
 
-  loginUsuario(email: string, senha: string): boolean {
-    for (let usuario of this.usuarios) {
-      if (usuario.email === email && usuario.senha === senha) {
-        this.usuarioLogado = email;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  contaExiste(email: string): boolean {
-    if (email === this.emailAdm) {
-      return true;
-    }
-    for (let usuario of this.usuarios) {
-      if (usuario.email === email) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   estaLogado(): boolean {
-    return this.usuarioLogado !== '';
+    return this.adminLogado || this.usuarioLogado != null; // pega adm logado ou o usuarioLogado
   }
 
-  cadastrar(email: string, senha: string) {
-    this.usuarios.push({ email: email, senha: senha });
-    this.usuarioLogado = email;
-  }
-
-  alterarEmail(emailNovo: string) {
-    for (let usuario of this.usuarios) {
-      if (usuario.email === this.usuarioLogado) {
-        usuario.email = emailNovo;
-      }
+  emailLogado(): string {
+    if(this.adminLogado){
+      return this.emailAdm;
     }
-    this.usuarioLogado = emailNovo;
-  }
 
-  alterarSenha(senhaNova: string) {
-    for (let usuario of this.usuarios) {
-      if (usuario.email === this.usuarioLogado) {
-        usuario.senha = senhaNova;
-      }
+    if(this.usuarioLogado){
+      return this.usuarioLogado.email;
     }
-  }
 
-  excluirConta() {
-    let listaNova: Usuario[] = [];
-    for (let usuario of this.usuarios) {
-      if (usuario.email !== this.usuarioLogado) {
-        listaNova.push(usuario);
-      }
-    }
-    this.usuarios = listaNova;
-    this.sair();
+    return "";
   }
-
+  
   sair() {
-    this.usuarioLogado = '';
+    this.usuarioLogado = null;
     this.adminLogado = false;
     this.carrinhoService.limpar();
   }

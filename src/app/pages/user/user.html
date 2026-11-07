@@ -9,7 +9,7 @@
       <div class="dado">
         <div class="dado-topo">
           <span class="rotulo">E-mail</span>
-          @if (!editandoEmail) {
+          @if (!editandoEmail && auth.usuarioLogado !== null) {
             <button type="button" class="botao-editar" (click)="editarEmail()">Editar</button>
           }
         </div>
@@ -31,7 +31,7 @@
       <div class="dado">
         <div class="dado-topo">
           <span class="rotulo">Senha</span>
-          @if (!editandoSenha) {
+          @if (!editandoSenha && auth.usuarioLogado !== null) {
             <button type="button" class="botao-editar" (click)="editarSenha()">Editar</button>
           }
         </div>
@@ -51,8 +51,10 @@
       </div>
 
       <button type="button" class="botao-sair" (click)="sair()">Sair da conta</button>
-      <button type="button" class="botao-excluir" (click)="excluirConta()">Excluir minha conta</button>
-
+      @if (auth.usuarioLogado !== null){
+        <button type="button" class="botao-excluir" (click)="excluirConta()">Excluir minha conta</button>
+      }
+    
       <a routerLink="/" class="link">Voltar para a loja</a>
     </div>
   </div>
