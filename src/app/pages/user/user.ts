@@ -9,7 +9,6 @@ import { AuthService } from '../../services/auth';
   templateUrl: './user.html',
   styleUrl: './user.css',
 })
-
 export class User {
   email: string = '';
 
@@ -22,7 +21,7 @@ export class User {
   erroSenha: string = '';
 
   constructor(public auth: AuthService, private router: Router) {
-    this.email = this.auth.usuarioLogado;
+    this.email = this.auth.emailLogado();
   }
 
   editarEmail() {
@@ -32,15 +31,36 @@ export class User {
   }
 
   salvarEmail() {
+    let usuario = this.auth.usuarioLogado;
+    if (usuario === null) {
+      return;
+    }
+
     if (!this.auth.validarEmail(this.novoEmail)) {
       this.erroEmail = 'Digite um e-mail válido.';
-    } else if (this.novoEmail !== this.email && this.auth.contaExiste(this.novoEmail)) {
-      this.erroEmail = 'Já existe uma conta com esse e-mail.';
-    } else {
-      this.auth.alterarEmail(this.novoEmail);
-      this.email = this.novoEmail;
-      this.editandoEmail = false;
+      return;
     }
+
+    this.auth.listar().subscribe({
+      next: (usuarios) => {
+        for (let outro of usuarios) {
+          if (outro.email === this.novoEmail && outro.id !== usuario.id) {
+            this.erroEmail = 'Já existe uma conta com esse e-mail.';
+            return;
+          }
+        }
+
+        this.auth.editar({ id: usuario.id, email: this.novoEmail, senha: usuario.senha }).subscribe({
+          next: (usuarioAtualizado) => {
+            this.auth.registrarLogin(usuarioAtualizado);
+            this.email = usuarioAtualizado.email;
+            this.editandoEmail = false;
+          },
+          error: () => alert('Erro ao alterar o e-mail.')
+        });
+      },
+      error: () => alert('Não foi possível conectar ao servidor.')
+    });
   }
 
   cancelarEmail() {
@@ -54,13 +74,24 @@ export class User {
   }
 
   salvarSenha() {
+    let usuario = this.auth.usuarioLogado;
+    if (usuario === null) {
+      return;
+    }
+
     if (this.novaSenha.length < 6) {
       this.erroSenha = 'A senha precisa ter pelo menos 6 caracteres.';
-    } else {
-      this.auth.alterarSenha(this.novaSenha);
-      this.editandoSenha = false;
-      alert('Senha alterada.');
+      return;
     }
+
+    this.auth.editar({ id: usuario.id, email: usuario.email, senha: this.novaSenha }).subscribe({
+      next: (usuarioAtualizado) => {
+        this.auth.registrarLogin(usuarioAtualizado);
+        this.editandoSenha = false;
+        alert('Senha alterada.');
+      },
+      error: () => alert('Erro ao alterar a senha.')
+    });
   }
 
   cancelarSenha() {
@@ -73,11 +104,21 @@ export class User {
   }
 
   excluirConta() {
+    let usuario = this.auth.usuarioLogado;
+    if (usuario === null || usuario.id === undefined) {
+      return;
+    }
+
     let confirmou = confirm('Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.');
     if (confirmou) {
-      this.auth.excluirConta();
-      alert('Conta excluída.');
-      this.router.navigate(['/']);
+      this.auth.excluir(usuario.id).subscribe({
+        next: () => {
+          this.auth.sair();
+          alert('Conta excluída.');
+          this.router.navigate(['/']);
+        },
+        error: () => alert('Erro ao excluir a conta.')
+      });
     }
   }
 }
