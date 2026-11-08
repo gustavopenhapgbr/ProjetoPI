@@ -24,17 +24,21 @@ export class PaginaProduto implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.produto = this.produtoService.buscarPorId(this.produtoService.idSelecionado);
+  this.produtoService.buscarPorIdNaApi(this.produtoService.idSelecionado).subscribe({
+    next: (produto) => {
+      this.produto = produto;
 
-    // Já deixa selecionado o primeiro tamanho que tem estoque
-    if (this.produto) {
       for (let tamanho of this.tamanhos) {
         if (this.tamanhoSelecionado === '' && this.estoqueDoTamanho(tamanho) > 0) {
           this.tamanhoSelecionado = tamanho;
         }
       }
+    },
+    error: (erro) => {
+      console.error('Erro ao carregar produto', erro);
     }
-  }
+  });
+}
 
   estoqueDoTamanho(tamanho: string): number {
     if (this.produto) {

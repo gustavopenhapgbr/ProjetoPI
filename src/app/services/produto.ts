@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Produto } from '../model/produto';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProdutoService {
+
+  private API = 'http://localhost:3000/produtos';
+  constructor(private http: HttpClient) {}
 
   produtos: Produto[] = [
     { id: 1, nome: 'Camiseta Cinza Clara', preco: 89.9, categoria: 'camisetas', imagem: '/images/camiseta_1_cinza_claro.png', descricao: 'Camiseta básica cinza clara.', destaque: true, estoqueP: 5, estoqueM: 5, estoqueG: 5, estoqueGG: 5 },
@@ -43,6 +48,10 @@ export class ProdutoService {
     return this.produtos;
   }
 
+  listarDaApi(): Observable<Produto[]> {
+  return this.http.get<Produto[]>(this.API);
+}
+
   listarPorCategoria(categoria: string): Produto[] {
     let resultado: Produto[] = [];
     for (let produto of this.produtos) {
@@ -62,6 +71,10 @@ export class ProdutoService {
     return undefined;
   }
 
+  buscarPorIdNaApi(id: number): Observable<Produto> {
+  return this.http.get<Produto>(`${this.API}/${id}`);
+}
+
   buscar(termo: string): Produto[] {
     let resultado: Produto[] = [];
     let busca = termo.trim().toLowerCase();
@@ -77,9 +90,24 @@ export class ProdutoService {
   }
 
   pesquisar(termo: string) {
-    this.termoPesquisa = termo;
-    this.resultadosPesquisa = this.buscar(termo);
-  }
+  this.termoPesquisa = termo;
+  this.resultadosPesquisa = [];
+
+  this.listarDaApi().subscribe({
+    next: (produtos) => {
+      const busca = termo.trim().toLowerCase();
+
+      for (let produto of produtos) {
+        if (produto.nome.toLowerCase().includes(busca)) {
+          this.resultadosPesquisa.push(produto);
+        }
+      }
+    },
+    error: (erro) => {
+      console.error('Erro ao pesquisar produtos', erro);
+    }
+  });
+}
 
   adicionar(produto: Produto) {
     produto.id = this.proximoId;

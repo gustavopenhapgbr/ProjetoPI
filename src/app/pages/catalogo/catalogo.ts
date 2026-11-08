@@ -36,8 +36,19 @@ export class Catalogo implements OnInit {
       }
     }
 
-    this.produtos = this.produtoService.listarPorCategoria(categoriaAtual);
+  this.produtoService.listarDaApi().subscribe({
+  next: (produtos) => {
+    for (let produto of produtos) {
+      if (produto.categoria === categoriaAtual) {
+        this.produtos.push(produto);
+      }
+    }
+  },
+  error: (erro) => {
+    console.error('Erro ao carregar produtos', erro);
   }
+});
+}
 
   abrirProduto(produto: Produto) {
     this.produtoService.idSelecionado = produto.id;
