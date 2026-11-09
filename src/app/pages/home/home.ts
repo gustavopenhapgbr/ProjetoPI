@@ -18,13 +18,20 @@ export class Home implements OnInit {
 
   constructor(private produtoService: ProdutoService, private router: Router) {}
 
-  ngOnInit(): void {
-    for (let produto of this.produtoService.listar()) {
-      if (produto.destaque) {
-        this.produtosDestaque.push(produto);
+    ngOnInit(): void {
+  this.produtoService.listarDaApi().subscribe({
+    next: (produtos) => {
+      for (let produto of produtos) {
+        if (produto.destaque) {
+          this.produtosDestaque.push(produto);
+        }
       }
+    },
+    error: (erro) => {
+      console.error('Erro ao carregar produtos', erro);
     }
-  }
+  });
+}
 
   abrirProduto(produto: Produto) {
     this.produtoService.idSelecionado = produto.id;
