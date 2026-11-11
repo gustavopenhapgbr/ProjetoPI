@@ -51,7 +51,7 @@ export class Register {
           }
         }
 
-        this.auth.incluir({ id: String (usuarios.length+1), email: this.email, senha: this.senha }).subscribe({
+        this.auth.incluir({ email: this.email, senha: this.senha }).subscribe({
           next: (usuarioCriado) => {
             this.auth.registrarLogin(usuarioCriado);
             alert('Conta criada! Bem-vindo à F.Company.');
