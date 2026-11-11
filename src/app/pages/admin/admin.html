@@ -98,9 +98,9 @@
   </div>
 
   <div class="lista-produtos">
-    <h2>Produtos cadastrados ({{ produtoService.listar().length }} em {{ grupos.length }} categorias)</h2>
+    <h2>Produtos cadastrados ({{ produtos.length }} em {{ grupos.length }} categorias)</h2>
 
-    @if (produtoService.listar().length === 0) {
+    @if (produtos.length === 0) {
       <p class="vazio">
         Nenhum produto cadastrado ainda.
       </p>

@@ -48,6 +48,7 @@ export class Admin implements OnInit {
     '/images/isqueiro.png'
   ];
 
+  produtos: Produto[] = [];
   grupos: GrupoCategoria[] = [];
   produtoEmEdicao: Produto = this.produtoVazio();
   editando: boolean = false;
@@ -59,7 +60,19 @@ export class Admin implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.montarGrupos();
+    this.carregarProdutos();
+  }
+
+  carregarProdutos() {
+    this.produtoService.listar().subscribe({
+      next: (produtos) => {
+        this.produtos = produtos;
+        this.montarGrupos();
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar produtos na administração', erro);
+      }
+    });
   }
 
   sair() {
@@ -68,7 +81,6 @@ export class Admin implements OnInit {
   }
 
   montarGrupos() {
-
     let abertas: string[] = [];
     for (let grupo of this.grupos) {
       if (grupo.aberto) {
@@ -79,7 +91,7 @@ export class Admin implements OnInit {
     this.grupos = [];
 
     for (let categoria of this.categorias) {
-      let produtos = this.produtoService.listarPorCategoria(categoria);
+      let produtos = this.produtos.filter(p => p.categoria === categoria);
 
       if (produtos.length > 0) {
         let grupo: GrupoCategoria = {
@@ -128,7 +140,6 @@ export class Admin implements OnInit {
 
   produtoVazio(): Produto {
     return {
-      id: 0,
       nome: '',
       preco: 0,
       categoria: 'camisetas',
@@ -164,12 +175,32 @@ export class Admin implements OnInit {
       alert('Informe a quantidade em estoque de pelo menos um tamanho.');
     } else {
       if (this.editando) {
-        this.produtoService.atualizar(p);
+        this.produtoService.editar(p).subscribe({
+          next: () => {
+            alert('Produto alterado com sucesso!');
+            this.cancelarEdicao();
+            this.carregarProdutos();
+          },
+          error: (erro) => {
+            console.error(erro);
+            alert('Erro ao alterar o produto.');
+          }
+        });
       } else {
-        this.produtoService.adicionar(p);
+        const novoProduto: Produto = { ...p };
+        delete novoProduto.id;
+        this.produtoService.incluir(novoProduto).subscribe({
+          next: () => {
+            alert(`Produto ${p.nome} cadastrado com sucesso!`);
+            this.cancelarEdicao();
+            this.carregarProdutos();
+          },
+          error: (erro) => {
+            console.error(erro);
+            alert('Erro ao cadastrar o produto.');
+          }
+        });
       }
-      this.cancelarEdicao();
-      this.montarGrupos();
     }
   }
 
@@ -195,11 +226,20 @@ export class Admin implements OnInit {
     this.editando = false;
   }
 
-  removerProduto(id: number) {
+  removerProduto(id?: number) {
+    if (id === undefined) return;
     let confirmou = confirm('Deseja remover este produto?');
     if (confirmou) {
-      this.produtoService.remover(id);
-      this.montarGrupos();
+      this.produtoService.excluir(id).subscribe({
+        next: () => {
+          alert('Produto removido com sucesso!');
+          this.carregarProdutos();
+        },
+        error: (erro) => {
+          console.error(erro);
+          alert('Erro ao remover o produto.');
+        }
+      });
     }
   }
 }

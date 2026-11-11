@@ -1,4 +1,4 @@
-@if (auth.estaLogado()) {
+@if (auth.usuarioLogado) {
   <div class="carrinho">
     <div class="carrinho-conteudo">
 
@@ -12,7 +12,7 @@
           </div>
         } @else {
           <div class="lista-itens">
-            @for (item of carrinhoService.itens; track $index) {
+            @for (item of carrinhoService.itens; track item.id) {
               <div class="item-card">
                 <div class="imagem-box">
                   <img [src]="item.produto.imagem" [alt]="item.produto.nome" />
@@ -28,13 +28,13 @@
                   <div class="controle-quantidade">
                     <button type="button"
                       [disabled]="item.quantidade <= 1"
-                      (click)="carrinhoService.diminuir(item)">-</button>
+                      (click)="diminuir(item)">-</button>
                     <span>{{ item.quantidade }}</span>
                     <button type="button"
                       [disabled]="item.quantidade >= estoqueDisponivel(item)"
-                      (click)="carrinhoService.aumentar(item)">+</button>
+                      (click)="aumentar(item)">+</button>
                   </div>
-                  <button type="button" class="btn-remover" (click)="carrinhoService.remover(item)">Remover</button>
+                  <button type="button" class="btn-remover" (click)="remover(item)">Remover</button>
                 </div>
               </div>
             }
@@ -74,7 +74,7 @@
 } @else {
   <div class="carrinho">
     <div class="carrinho-vazio">
-      <p>Você precisa estar logado para ver o carrinho.</p>
+      <p>Você precisa estar logado como cliente para ver o carrinho.</p>
       <a routerLink="/login" class="btn-loja">Fazer login</a>
     </div>
   </div>

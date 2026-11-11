@@ -24,20 +24,20 @@ export class PaginaProduto implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  this.produtoService.buscarPorIdNaApi(this.produtoService.idSelecionado).subscribe({
-    next: (produto) => {
-      this.produto = produto;
+    this.produtoService.buscarPorId(this.produtoService.idSelecionado).subscribe({
+      next: (produto) => {
+        this.produto = produto;
 
-      for (let tamanho of this.tamanhos) {
-        if (this.tamanhoSelecionado === '' && this.estoqueDoTamanho(tamanho) > 0) {
-          this.tamanhoSelecionado = tamanho;
+        for (let tamanho of this.tamanhos) {
+          if (this.tamanhoSelecionado === '' && this.estoqueDoTamanho(tamanho) > 0) {
+            this.tamanhoSelecionado = tamanho;
+          }
         }
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar produto', erro);
       }
-    },
-    error: (erro) => {
-      console.error('Erro ao carregar produto', erro);
-    }
-  });
+    });
 }
 
   estoqueDoTamanho(tamanho: string): number {
@@ -56,20 +56,57 @@ export class PaginaProduto implements OnInit {
       return;
     }
 
-    if (!this.auth.estaLogado()) {
-      alert('Você precisa estar logado para adicionar produtos ao carrinho.');
+    if (this.auth.adminLogado) {
+      alert('Administradores não podem adicionar produtos ao carrinho.');
+      return;
+    }
+
+    if (!this.auth.usuarioLogado) {
+      alert('Você precisa estar logado como cliente para adicionar produtos ao carrinho.');
       this.router.navigate(['/login']);
       return;
     }
 
-    let noCarrinho = this.carrinhoService.quantidadeNoCarrinho(this.produto, this.tamanhoSelecionado);
-    if (noCarrinho >= this.estoqueDoTamanho(this.tamanhoSelecionado)) {
-      alert('Você já colocou no carrinho todas as unidades disponíveis do tamanho ' + this.tamanhoSelecionado + '.');
+    const usuarioId = String(this.auth.usuarioLogado.id);
+    const tamanho = this.tamanhoSelecionado;
+    const estoqueDisponivel = this.estoqueDoTamanho(tamanho);
+
+    if (estoqueDisponivel <= 0) {
+      alert('Este tamanho está esgotado.');
       return;
     }
 
-    this.carrinhoService.adicionar(this.produto, this.tamanhoSelecionado);
-    alert('Produto adicionado ao carrinho!');
+    this.carrinhoService.listarPorUsuario(usuarioId).subscribe({
+      next: (itens) => {
+        const itemExistente = itens.find(
+          (i) => i.produto.id === this.produto!.id && i.tamanho === tamanho
+        );
+
+        if (itemExistente) {
+          if (itemExistente.quantidade >= estoqueDisponivel) {
+            alert(`Você já colocou no carrinho todas as ${estoqueDisponivel} unidades disponíveis deste tamanho.`);
+            return;
+          }
+          itemExistente.quantidade++;
+          this.carrinhoService.atualizarItem(itemExistente).subscribe({
+            next: () => alert('Quantidade do produto atualizada no carrinho!'),
+            error: () => alert('Erro ao atualizar produto no carrinho.')
+          });
+        } else {
+          const novoItem = {
+            usuarioId: usuarioId,
+            produto: this.produto!,
+            tamanho: tamanho,
+            quantidade: 1
+          };
+          this.carrinhoService.adicionarItem(novoItem).subscribe({
+            next: () => alert('Produto adicionado ao carrinho com sucesso!'),
+            error: () => alert('Erro ao adicionar produto ao carrinho.')
+          });
+        }
+      },
+      error: () => alert('Erro ao consultar carrinho na API.')
+    });
   }
 
   formatarPreco(preco: number): string {

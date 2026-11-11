@@ -8,22 +8,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-
-  // cria Api de usuarios para ser utilizada
   private API = 'http://localhost:3000/usuarios';
 
   // login do adm
   emailAdm: string = 'admin@gmail.com';
   senhaAdm: string = 'adm123';
 
-  usuarioLogado: Usuario | null = null; //Devolve usuario inteiro ou vazio
+  usuarioLogado: Usuario | null = null;
   adminLogado: boolean = false;
   constructor(private http: HttpClient, private carrinhoService: CarrinhoService) { }
 
-  // métodos
-
   listar(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.API); // this api indica onde vai o endereço onde a requisição vai ser enviada. 
+    return this.http.get<Usuario[]>(this.API);
   }
 
   incluir(usuario: Usuario): Observable<Usuario> {
@@ -39,7 +35,7 @@ export class AuthService {
   }
 
   registrarLogin(usuario:Usuario){
-    this.usuarioLogado = usuario;    // Registra o usuario que está logado
+    this.usuarioLogado = usuario; 
   }
 
   loginAdmin(email: string, senha: string): boolean {
@@ -50,9 +46,8 @@ export class AuthService {
     return false;
   }
 
-
   estaLogado(): boolean {
-    return this.adminLogado || this.usuarioLogado != null; // pega adm logado ou o usuarioLogado
+    return this.adminLogado || this.usuarioLogado != null; 
   }
 
   emailLogado(): string {
