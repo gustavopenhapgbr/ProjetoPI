@@ -30,6 +30,22 @@ export class Carrinho implements OnInit {
       this.carrinhoService.listarPorUsuario(usuarioId).subscribe({
         next: (itens) => {
           this.carrinhoService.itens = itens;
+
+          for (let item of this.carrinhoService.itens) {
+            if (item.produto.id !== undefined) {
+              this.produtoService.buscarPorId(item.produto.id).subscribe({
+                next: (produtoAtualizado) => {
+                  item.produto = produtoAtualizado;
+
+                  const estoqueAtual = this.estoqueDisponivel(item);
+                  if (item.quantidade > estoqueAtual && estoqueAtual > 0) {
+                    item.quantidade = estoqueAtual;
+                    this.carrinhoService.atualizarItem(item).subscribe();
+                  }
+                }
+              });
+            }
+          }
         },
         error: (erro) => {
           console.error('Erro ao carregar itens do carrinho', erro);
@@ -82,10 +98,16 @@ export class Carrinho implements OnInit {
     const itensParaProcessar = [...this.carrinhoService.itens];
 
     for (let item of itensParaProcessar) {
-      this.produtoService.baixarEstoque(item.produto, item.tamanho, item.quantidade);
-      this.produtoService.editar(item.produto).subscribe({
-        error: (erro) => console.error('Erro ao atualizar estoque na API', erro)
-      });
+      if (item.produto.id !== undefined) {
+        this.produtoService.buscarPorId(item.produto.id).subscribe({
+          next: (prodAtual) => {
+            this.produtoService.baixarEstoque(prodAtual, item.tamanho, item.quantidade);
+            this.produtoService.editar(prodAtual).subscribe({
+              error: (erro) => console.error('Erro ao atualizar estoque na API', erro)
+            });
+          }
+        });
+      }
 
       if (item.id !== undefined) {
         this.carrinhoService.removerItem(item.id).subscribe({

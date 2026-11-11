@@ -24,6 +24,16 @@
       "id": "5",
       "email": "cliente5@gmail.com",
       "senha": "123456"
+    },
+    {
+      "id": "6",
+      "email": "davi@gmail.com",
+      "senha": "123123"
+    },
+    {
+      "id": "7",
+      "email": "j@gmail.com",
+      "senha": "123123"
     }
   ],
   "produtos": [
@@ -48,8 +58,8 @@
       "imagem": "/images/camiseta_2_cinza_escuro.png",
       "descricao": "Camiseta cinza escura.",
       "destaque": false,
-      "estoqueP": 5,
-      "estoqueM": 5,
+      "estoqueP": 2,
+      "estoqueM": 0,
       "estoqueG": 5,
       "estoqueGG": 5
     },
@@ -340,6 +350,26 @@
       "id": 24
     }
   ],
-  "carrinho": [],
+  "carrinho": [
+    {
+      "usuarioId": "6",
+      "produto": {
+        "id": 2,
+        "nome": "Camiseta Cinza Escura",
+        "preco": 89.9,
+        "categoria": "camisetas",
+        "imagem": "/images/camiseta_2_cinza_escuro.png",
+        "descricao": "Camiseta cinza escura.",
+        "destaque": false,
+        "estoqueP": 2,
+        "estoqueM": 0,
+        "estoqueG": 5,
+        "estoqueGG": 5
+      },
+      "tamanho": "P",
+      "quantidade": 1,
+      "id": 1
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

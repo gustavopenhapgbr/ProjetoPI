@@ -83,27 +83,21 @@ export class PaginaProduto implements OnInit {
         );
 
         if (itemExistente) {
-          if (itemExistente.quantidade >= estoqueDisponivel) {
-            alert(`Você já colocou no carrinho todas as ${estoqueDisponivel} unidades disponíveis deste tamanho.`);
-            return;
-          }
-          itemExistente.quantidade++;
-          this.carrinhoService.atualizarItem(itemExistente).subscribe({
-            next: () => alert('Quantidade do produto atualizada no carrinho!'),
-            error: () => alert('Erro ao atualizar produto no carrinho.')
-          });
-        } else {
-          const novoItem = {
-            usuarioId: usuarioId,
-            produto: this.produto!,
-            tamanho: tamanho,
-            quantidade: 1
-          };
-          this.carrinhoService.adicionarItem(novoItem).subscribe({
-            next: () => alert('Produto adicionado ao carrinho com sucesso!'),
-            error: () => alert('Erro ao adicionar produto ao carrinho.')
-          });
+          alert('Este produto já foi adicionado ao carrinho.');
+          return;
         }
+
+        const novoItem = {
+          usuarioId: usuarioId,
+          produto: this.produto!,
+          tamanho: tamanho,
+          quantidade: 1
+        };
+
+        this.carrinhoService.adicionarItem(novoItem).subscribe({
+          next: () => alert('Produto adicionado ao carrinho com sucesso!'),
+          error: () => alert('Erro ao adicionar produto ao carrinho.')
+        });
       },
       error: () => alert('Erro ao consultar carrinho na API.')
     });
