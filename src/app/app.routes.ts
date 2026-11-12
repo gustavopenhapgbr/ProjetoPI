@@ -25,6 +25,7 @@ export const routes: Routes = [
     { path: 'produto', component: PaginaProduto, title: 'Produto'},
     { path: 'pesquisa', component:Pesquisa, title: 'Pesquisa' },
     { path: 'admin', component: Admin, title: 'Painel Administrativo' },
+    {path: 'admin-produto-editar/:id', component: Admin, title: 'Editar produto' },
     {path: 'carrinho', component: Carrinho, title: 'carrinho'}
 
 ];
