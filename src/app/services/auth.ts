@@ -22,20 +22,24 @@ export class AuthService {
     return this.http.get<Usuario[]>(this.API);
   }
 
+  buscarPorId(id: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.API}/${id}`);
+  }
+
   incluir(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(this.API, usuario);
   }
 
-  editar(usuario: Usuario): Observable<Usuario>{
+  editar(usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.API}/${usuario.id}`, usuario);
   }
 
-  excluir(id:String): Observable<Usuario>{
+  excluir(id: String): Observable<Usuario> {
     return this.http.delete<Usuario>(`${this.API}/${id}`);
   }
 
-  registrarLogin(usuario:Usuario){
-    this.usuarioLogado = usuario; 
+  registrarLogin(usuario: Usuario) {
+    this.usuarioLogado = usuario;
   }
 
   loginAdmin(email: string, senha: string): boolean {
@@ -47,21 +51,21 @@ export class AuthService {
   }
 
   estaLogado(): boolean {
-    return this.adminLogado || this.usuarioLogado != null; 
+    return this.adminLogado || this.usuarioLogado != null;
   }
 
   emailLogado(): string {
-    if(this.adminLogado){
+    if (this.adminLogado) {
       return this.emailAdm;
     }
 
-    if(this.usuarioLogado){
+    if (this.usuarioLogado) {
       return this.usuarioLogado.email;
     }
 
     return "";
   }
-  
+
   sair() {
     this.usuarioLogado = null;
     this.adminLogado = false;
