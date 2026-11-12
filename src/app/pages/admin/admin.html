@@ -142,7 +142,7 @@
                   <td>{{ formatarPreco(produto.preco) }}</td>
                   <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
                   <td class="acoes">
-                    <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
+                    <button class="btn-editar" [routerLink]="['/admin-produto-editar', produto.id]">Editar</button>
                     <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
                   </td>
                 </tr>

@@ -11,7 +11,6 @@ export class ProdutoService {
 
   constructor(private http: HttpClient) {}
 
-  idSelecionado?: number;
   termoPesquisa: string = '';
   resultadosPesquisa: Produto[] = [];
 

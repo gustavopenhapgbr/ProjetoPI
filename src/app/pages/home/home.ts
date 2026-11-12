@@ -34,9 +34,8 @@ export class Home implements OnInit {
   }
 
   abrirProduto(produto: Produto) {
-    this.produtoService.idSelecionado = produto.id;
-    this.router.navigate(['/produto']);
-  }
+  this.router.navigate(['/produto', produto.id]);
+}
 
   formatarPreco(preco: number): string {
     return 'R$ ' + preco.toFixed(2).replace('.', ',');

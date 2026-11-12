@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'; 
 import { ProdutoService } from '../../services/produto';
 import { CarrinhoService } from '../../services/carrinho';
 import { AuthService } from '../../services/auth';
@@ -20,11 +20,15 @@ export class PaginaProduto implements OnInit {
     private produtoService: ProdutoService,
     private carrinhoService: CarrinhoService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    this.produtoService.buscarPorId(this.produtoService.idSelecionado).subscribe({
+ ngOnInit(): void {
+  const produtoId = this.route.snapshot.paramMap.get('id');
+
+  if (produtoId) {
+    this.produtoService.buscarPorId(produtoId).subscribe({
       next: (produto) => {
         this.produto = produto;
 
@@ -38,6 +42,7 @@ export class PaginaProduto implements OnInit {
         console.error('Erro ao carregar produto', erro);
       }
     });
+  }
 }
 
   estoqueDoTamanho(tamanho: string): number {
