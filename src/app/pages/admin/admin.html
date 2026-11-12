@@ -9,6 +9,11 @@
   <div class="form-produto">
     <h2>{{ editando ? 'Editar produto' : 'Adicionar produto' }}</h2>
 
+    @if (editando) {
+  <label for="id">ID</label>
+  <input id="id" name="id" type="text" [ngModel]="produtoEmEdicao.id" disabled />
+}
+
     <label for="nome">Nome do produto</label>
     <input
       id="nome"
@@ -85,7 +90,7 @@
       Produto em destaque nesta categoria
     </label>
 
-    <div class="botoes-form">
+
       <button class="btn-salvar" (click)="salvarProduto()">
         {{ editando ? 'Salvar alterações' : 'Adicionar produto' }}
       </button>
@@ -95,7 +100,7 @@
         </button>
       }
     </div>
-  </div>
+
 
   <div class="lista-produtos">
     <h2>Produtos cadastrados ({{ produtos.length }} em {{ grupos.length }} categorias)</h2>
@@ -142,7 +147,7 @@
                   <td>{{ formatarPreco(produto.preco) }}</td>
                   <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
                   <td class="acoes">
-                    <button class="btn-editar" (click)="editarProduto(produto)">Editar</button>
+                   <button class="btn-editar" [routerLink]="['/admin-produto-editar', produto.id]">Editar</button>
                     <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
                   </td>
                 </tr>

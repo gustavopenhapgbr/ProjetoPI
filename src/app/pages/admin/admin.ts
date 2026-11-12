@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { ProdutoService } from '../../services/produto';
 import { Produto } from '../../model/produto';
@@ -56,12 +56,22 @@ export class Admin implements OnInit {
   constructor(
     public auth: AuthService,
     public produtoService: ProdutoService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
     this.carregarProdutos();
+    if (id) {
+      this.editando = true;
+      this.produtoService.buscarPorId(id).subscribe({
+        next: (produto) => this.produtoEmEdicao = produto
+      });
+    }
   }
+
+
 
   carregarProdutos() {
     this.produtoService.listar().subscribe({
@@ -169,7 +179,7 @@ export class Admin implements OnInit {
     if (p.nome.trim() === '' || p.preco <= 0) {
       alert('Preencha ao menos o nome e um preço válido.');
     } else if (!this.quantidadeValida(p.estoqueP) || !this.quantidadeValida(p.estoqueM) ||
-               !this.quantidadeValida(p.estoqueG) || !this.quantidadeValida(p.estoqueGG)) {
+      !this.quantidadeValida(p.estoqueG) || !this.quantidadeValida(p.estoqueGG)) {
       alert('As quantidades de estoque devem ser números inteiros iguais ou maiores que 0.');
     } else if (this.produtoService.totalEstoque(p) === 0) {
       alert('Informe a quantidade em estoque de pelo menos um tamanho.');
@@ -178,8 +188,7 @@ export class Admin implements OnInit {
         this.produtoService.editar(p).subscribe({
           next: () => {
             alert('Produto alterado com sucesso!');
-            this.cancelarEdicao();
-            this.carregarProdutos();
+            this.router.navigate(['/admin']);
           },
           error: (erro) => {
             console.error(erro);
@@ -187,43 +196,24 @@ export class Admin implements OnInit {
           }
         });
       } else {
-        const novoProduto: Produto = { ...p };
-        delete novoProduto.id;
-        this.produtoService.incluir(novoProduto).subscribe({
+        this.produtoService.incluir(p).subscribe({
           next: () => {
-            alert(`Produto ${p.nome} cadastrado com sucesso!`);
+            alert(`Produto ${p.nome} cadastrado com sucesso`);
             this.cancelarEdicao();
             this.carregarProdutos();
           },
           error: (erro) => {
             console.error(erro);
-            alert('Erro ao cadastrar o produto.');
+            alert('Erro ao tentar cadastrar o produto');
           }
+
         });
       }
     }
   }
-
-  editarProduto(produto: Produto) {
-    this.produtoEmEdicao = {
-      id: produto.id,
-      nome: produto.nome,
-      preco: produto.preco,
-      categoria: produto.categoria,
-      imagem: produto.imagem,
-      descricao: produto.descricao,
-      destaque: produto.destaque,
-      estoqueP: produto.estoqueP,
-      estoqueM: produto.estoqueM,
-      estoqueG: produto.estoqueG,
-      estoqueGG: produto.estoqueGG
-    };
-    this.editando = true;
-  }
-
   cancelarEdicao() {
     this.produtoEmEdicao = this.produtoVazio();
-    this.editando = false;
+    this.router.navigate(['/admin']);
   }
 
   removerProduto(id?: number) {
