@@ -4,6 +4,8 @@ import { CarrinhoService } from '../../services/carrinho';
 import { AuthService } from '../../services/auth';
 import { ProdutoService } from '../../services/produto';
 import { ProdutoCarrinho } from '../../model/produto-carrinho';
+import { PedidoService } from '../../services/pedido';
+import { Pedido } from '../../model/pedido';
 
 @Component({
   selector: 'app-carrinho',
@@ -17,6 +19,7 @@ export class Carrinho implements OnInit {
     public carrinhoService: CarrinhoService,
     public auth: AuthService,
     private produtoService: ProdutoService,
+    private pedidoService: PedidoService,
     private router: Router
   ) {}
 
@@ -97,28 +100,46 @@ export class Carrinho implements OnInit {
 
     const itensParaProcessar = [...this.carrinhoService.itens];
 
-    for (let item of itensParaProcessar) {
-      if (item.produto.id !== undefined) {
-        this.produtoService.buscarPorId(item.produto.id).subscribe({
-          next: (prodAtual) => {
-            this.produtoService.baixarEstoque(prodAtual, item.tamanho, item.quantidade);
-            this.produtoService.editar(prodAtual).subscribe({
-              error: (erro) => console.error('Erro ao atualizar estoque na API', erro)
+    const pedido: Pedido = {
+      usuarioId: this.auth.usuarioLogado ? String(this.auth.usuarioLogado.id) : '',
+      email: this.auth.emailLogado(),
+      itens: itensParaProcessar.map((i) => ({
+        usuarioId: i.usuarioId,
+        produto: i.produto,
+        tamanho: i.tamanho,
+        quantidade: i.quantidade
+      })),
+      total: this.carrinhoService.total(),
+      data: new Date().toISOString()
+    };
+
+    this.pedidoService.incluir(pedido).subscribe({
+      next: () => {
+        for (let item of itensParaProcessar) {
+          if (item.produto.id !== undefined) {
+            this.produtoService.buscarPorId(item.produto.id).subscribe({
+              next: (prodAtual) => {
+                this.produtoService.baixarEstoque(prodAtual, item.tamanho, item.quantidade);
+                this.produtoService.editar(prodAtual).subscribe({
+                  error: (erro) => console.error('Erro ao atualizar estoque na API', erro)
+                });
+              }
             });
           }
-        });
-      }
 
-      if (item.id !== undefined) {
-        this.carrinhoService.removerItem(item.id).subscribe({
-          error: (erro) => console.error('Erro ao deletar item do carrinho', erro)
-        });
-      }
-    }
+          if (item.id !== undefined) {
+            this.carrinhoService.removerItem(item.id).subscribe({
+              error: (erro) => console.error('Erro ao deletar item do carrinho', erro)
+            });
+          }
+        }
 
-    this.carrinhoService.limpar();
-    alert('Compra finalizada com sucesso! Obrigado por comprar na F.Company.');
-    this.router.navigate(['/']);
+        this.carrinhoService.limpar();
+        alert('Compra finalizada com sucesso! Obrigado por comprar na F.Company.');
+        this.router.navigate(['/']);
+      },
+      error: () => alert('Erro ao registrar o pedido. Tente novamente.')
+    });
   }
 
   formatarPreco(preco: number): string {
