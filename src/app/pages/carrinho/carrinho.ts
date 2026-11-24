@@ -100,7 +100,7 @@ export class Carrinho implements OnInit {
 
     const itensParaProcessar = [...this.carrinhoService.itens];
 
-    const pedido: Pedido = {
+       const pedido: Pedido = {
       usuarioId: this.auth.usuarioLogado ? String(this.auth.usuarioLogado.id) : '',
       email: this.auth.emailLogado(),
       itens: itensParaProcessar.map((i) => ({
@@ -109,10 +109,9 @@ export class Carrinho implements OnInit {
         tamanho: i.tamanho,
         quantidade: i.quantidade
       })),
-      total: this.carrinhoService.total(),
-      data: new Date().toISOString()
+      total: this.carrinhoService.total()
     };
-
+    
     this.pedidoService.incluir(pedido).subscribe({
       next: () => {
         for (let item of itensParaProcessar) {
