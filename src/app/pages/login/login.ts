@@ -25,11 +25,6 @@ export class Login {
   }
 
   entrar() {
-    if (this.auth.loginAdmin(this.email, this.senha)) {
-      this.router.navigate(['/admin']);
-      return;
-    }
-
     this.auth.listar().subscribe({
       next: (usuarios) => {
         let emailExiste = false;
@@ -38,8 +33,13 @@ export class Login {
           if (usuario.email === this.email) {
             emailExiste = true;
             if (usuario.senha === this.senha) {
-              this.auth.registrarLogin(usuario);
-              this.router.navigate(['/']);
+              if (usuario.admin) {
+                this.auth.loginAdmin(usuario);
+                this.router.navigate(['/admin']);
+              } else {
+                this.auth.registrarLogin(usuario);
+                this.router.navigate(['/']);
+              }
               return;
             }
           }
