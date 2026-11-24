@@ -34,6 +34,13 @@
       "id": "7",
       "email": "j@gmail.com",
       "senha": "123123"
+    },
+
+    {
+      "id": "8",
+      "email": "admin@gmail.com",
+      "senha": "admin123",
+      "admin": "true"
     }
   ],
   "produtos": [

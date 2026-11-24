@@ -10,9 +10,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private API = 'http://localhost:3000/usuarios';
 
-  // login do adm
-  emailAdm: string = 'admin@gmail.com';
-  senhaAdm: string = 'adm123';
+  emailAdmin: string = '';
 
   usuarioLogado: Usuario | null = null;
   adminLogado: boolean = false;
@@ -42,12 +40,9 @@ export class AuthService {
     this.usuarioLogado = usuario;
   }
 
-  loginAdmin(email: string, senha: string): boolean {
-    if (email === this.emailAdm && senha === this.senhaAdm) {
-      this.adminLogado = true;
-      return true;
-    }
-    return false;
+  loginAdmin(usuario: Usuario) {
+    this.adminLogado = true;
+    this.emailAdmin = usuario.email;
   }
 
   estaLogado(): boolean {
@@ -56,7 +51,7 @@ export class AuthService {
 
   emailLogado(): string {
     if (this.adminLogado) {
-      return this.emailAdm;
+      return this.emailAdmin;
     }
 
     if (this.usuarioLogado) {
@@ -69,6 +64,7 @@ export class AuthService {
   sair() {
     this.usuarioLogado = null;
     this.adminLogado = false;
+    this.emailAdmin = '';
     this.carrinhoService.limpar();
   }
 

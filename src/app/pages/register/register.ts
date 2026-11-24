@@ -37,11 +37,6 @@ export class Register {
   }
 
   verificarEmailECadastrar() {
-    if (this.email === this.auth.emailAdm) {
-      this.erro = 'Já existe uma conta com esse e-mail.';
-      return;
-    }
-
     this.auth.listar().subscribe({
       next: (usuarios) => {
         for (let usuario of usuarios) {
