@@ -2,17 +2,24 @@
 
 <app-banner></app-banner>
 
-<div class="barra-titulo">Selecionados a dedo</div>
+@if (produtosDestaque.length > 0) {
+  <div class="barra-titulo">Selecionados a dedo</div>
 
-<div class="grade-produtos">
-  @for (produto of produtosDestaque; track produto.id) {
-    <div class="card-produto hSizeCard" (click)="abrirProduto(produto)">
-      <img [src]="produto.imagem" [alt]="produto.nome">
-      <div class="card-info">
-        <div class="card-categoria">{{ produto.categoria }}</div>
-        <div class="card-nome">{{ produto.nome }}</div>
-        <div class="card-preco">{{ formatarPreco(produto.preco) }}</div>
+  <div class="grade-produtos">
+    @for (produto of produtosDestaque; track produto.id) {
+      <div class="card-produto hSizeCard" (click)="abrirProduto(produto)">
+        <img [src]="produto.imagem" [alt]="produto.nome">
+        <div class="card-info">
+          <div class="card-categoria">{{ produto.categoria }}</div>
+          <div class="card-nome">{{ produto.nome }}</div>
+          <div class="card-preco">{{ formatarPreco(produto.preco) }}</div>
+        </div>
       </div>
-    </div>
-  }
-</div>
+    }
+  </div>
+} @else {
+  <div class="mensagem-vazia">
+    <p>Nenhum produto em destaque.</p>
+    <span>Não há produtos em destaque no momento. Novos itens podem ser adicionados futuramente.</span>
+  </div>
+}
