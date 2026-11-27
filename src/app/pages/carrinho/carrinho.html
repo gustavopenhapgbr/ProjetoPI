@@ -1,81 +1,101 @@
 @if (auth.usuarioLogado) {
-  <div class="carrinho">
-    <div class="carrinho-conteudo">
+  <div class="pagina-central">
+    <div class="cabecalho-pagina">
+      <div>
+        <span class="auth-tag">F Company</span>
+        <h1>Seu carrinho</h1>
+      </div>
+      <span class="cabecalho-contagem">{{ carrinhoService.itens.length }} itens selecionados</span>
+    </div>
 
-      <div class="carrinho-esquerda">
-        <h2 class="titulo-secao">Seu Carrinho ({{ carrinhoService.itens.length }})</h2>
+    <div class="grade-dupla">
+      <div class="caixa">
+        <div class="caixa-topo">Produtos no carrinho ({{ carrinhoService.itens.length }})</div>
 
-        @if (carrinhoService.itens.length === 0) {
-          <div class="carrinho-vazio">
-            <p>O seu carrinho está vazio.</p>
-            <a routerLink="/" class="btn-loja">Voltar à loja</a>
-          </div>
-        } @else {
-          <div class="lista-itens">
+        <div class="lista-scroll">
+          @if (carrinhoService.itens.length === 0) {
+            <div class="lista-vazia">
+              <p>Carrinho vazio</p>
+              <span>Você ainda não adicionou nenhum produto ao seu carrinho.</span>
+              <a class="btn-padrao btn-voltar" routerLink="/">Voltar à loja</a>
+            </div>
+          } @else {
             @for (item of carrinhoService.itens; track item.id) {
-              <div class="item-card">
-                <div class="imagem-box">
-                  <img [src]="item.produto.imagem" [alt]="item.produto.nome" />
+              <div class="item-linha">
+                <div class="item-foto">
+                  <img [src]="item.produto.imagem" [alt]="item.produto.nome">
                 </div>
 
-                <div class="detalhes">
-                  <h3 class="nome-produto">{{ item.produto.nome }}</h3>
-                  <p class="tamanho-produto">Tamanho: {{ item.tamanho }}</p>
-                  <strong class="preco-produto">{{ formatarPreco(carrinhoService.subtotal(item)) }}</strong>
+                <div class="item-info">
+                  <div class="item-categoria">{{ item.produto.categoria }}</div>
+                  <div class="item-nome">{{ item.produto.nome }}</div>
+                  <div class="item-detalhe-linha">
+                    <span class="tag-cinza">Tam. {{ item.tamanho }}</span>
+                    <span class="item-preco">{{ formatarPreco(carrinhoService.subtotal(item)) }}</span>
+                  </div>
                 </div>
 
-                <div class="acoes">
-                  <div class="controle-quantidade">
-                    <button type="button"
+                <div class="item-acoes">
+                  <div class="controle-qtd">
+                    <button
+                      type="button"
+                      class="btn-padrao btn-qtd btn-menos"
                       [disabled]="item.quantidade <= 1"
                       (click)="diminuir(item)">-</button>
                     <span>{{ item.quantidade }}</span>
-                    <button type="button"
+                    <button
+                      type="button"
+                      class="btn-padrao btn-qtd btn-mais"
                       [disabled]="item.quantidade >= estoqueDisponivel(item)"
                       (click)="aumentar(item)">+</button>
                   </div>
+
                   <button type="button" class="btn-remover" (click)="remover(item)">Remover</button>
                 </div>
               </div>
             }
+          }
+        </div>
+      </div>
+
+      <div class="caixa">
+        <div class="caixa-topo">Resumo do pedido</div>
+
+        <div class="resumo-corpo">
+          <div class="linha-resumo">
+            <span>Subtotal</span>
+            <span>{{ formatarPreco(carrinhoService.total()) }}</span>
           </div>
-        }
+
+          <div class="linha-resumo">
+            <span>Frete</span>
+            <span class="selo-roxo">Grátis</span>
+          </div>
+
+          <div class="divisor"></div>
+
+          <div class="linha-resumo linha-total">
+            <span>Total</span>
+            <span>{{ formatarPreco(carrinhoService.total()) }}</span>
+          </div>
+
+          <button
+            type="button"
+            class="btn-padrao btn-finalizar"
+            [disabled]="carrinhoService.itens.length === 0"
+            (click)="finalizarCompra()">
+            Finalizar compra
+          </button>
+
+          <a class="link-continuar" routerLink="/">Continuar comprando</a>
+        </div>
       </div>
-
-      <div class="resumo-card">
-        <h3>Resumo do Pedido</h3>
-
-        <div class="linha-resumo">
-          <span>Subtotal</span>
-          <span>{{ formatarPreco(carrinhoService.total()) }}</span>
-        </div>
-
-        <div class="linha-resumo">
-          <span>Frete</span>
-          <span class="gratis">Grátis</span>
-        </div>
-
-        <hr class="divisor" />
-
-        <div class="linha-resumo total">
-          <strong>Total</strong>
-          <strong>{{ formatarPreco(carrinhoService.total()) }}</strong>
-        </div>
-
-        <button type="button" class="btn-finalizar"
-          [disabled]="carrinhoService.itens.length === 0"
-          (click)="finalizarCompra()">
-          Finalizar compra
-        </button>
-      </div>
-
     </div>
   </div>
 } @else {
-  <div class="carrinho">
-    <div class="carrinho-vazio">
-      <p>Você precisa estar logado como cliente para ver o carrinho.</p>
-      <a routerLink="/login" class="btn-loja">Fazer login</a>
-    </div>
+  <div class="mensagem-vazia">
+    <p>Acesso necessário</p>
+    <span>Você precisa estar logado como cliente para ver o carrinho.</span>
+    <a class="btn-padrao btn-voltar" routerLink="/login">Fazer login</a>
   </div>
 }

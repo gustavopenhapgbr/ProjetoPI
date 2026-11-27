@@ -7,7 +7,6 @@ import { Produto } from '../../model/produto';
   selector: 'app-pesquisa',
   imports: [RouterLink],
   templateUrl: './pesquisa.html',
-  styleUrl: './pesquisa.css',
 })
 export class Pesquisa {
 

@@ -1,37 +1,43 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './register.html',
-  styleUrl: './register.css',
 })
 export class Register {
   email: string = '';
   senha: string = '';
   confirmarSenha: string = '';
-  erro: string = '';
+  botaoDesabilitado: boolean = true;
 
   constructor(private auth: AuthService, private router: Router) { }
 
+  validarFormulario() {
+    if (this.email.trim() !== '' && this.senha.trim() !== '' && this.confirmarSenha.trim() !== '') {
+      this.botaoDesabilitado = false;
+    } else {
+      this.botaoDesabilitado = true;
+    }
+  }
+
   cadastrar() {
     if (this.email.trim() === '') {
-      this.erro = 'Digite seu e-mail.';
+      alert('Digite seu e-mail.');
     } else if (!this.auth.validarEmail(this.email)) {
-      this.erro = 'Digite um e-mail válido.';
+      alert('Digite um e-mail válido.');
     } else if (this.senha === '') {
-      this.erro = 'Digite uma senha.';
+      alert('Digite uma senha.');
     } else if (this.senha.length < 6) {
-      this.erro = 'A senha precisa ter pelo menos 6 caracteres.';
+      alert('A senha precisa ter pelo menos 6 caracteres.');
     } else if (this.confirmarSenha === '') {
-      this.erro = 'Confirme sua senha.';
+      alert('Confirme sua senha.');
     } else if (this.senha !== this.confirmarSenha) {
-      this.erro = 'As senhas não são iguais.';
+      alert('As senhas não são iguais.');
     } else {
-      this.erro = '';
       this.verificarEmailECadastrar();
     }
   }
@@ -41,7 +47,7 @@ export class Register {
       next: (usuarios) => {
         for (let usuario of usuarios) {
           if (usuario.email === this.email) {
-            this.erro = 'Já existe uma conta com esse e-mail.';
+            alert('Já existe uma conta com esse e-mail.');
             return;
           }
         }
@@ -49,13 +55,13 @@ export class Register {
         this.auth.incluir({ email: this.email, senha: this.senha }).subscribe({
           next: (usuarioCriado) => {
             this.auth.registrarLogin(usuarioCriado);
-            alert('Conta criada! Bem-vindo à F.Company.');
+            alert('Conta criada! Bem-vindo à F Company.');
             this.router.navigate(['/']);
           },
           error: () => alert('Erro ao criar a conta.')
         });
       },
-      error: () => alert('Deu erro')
+      error: () => alert('Erro ao conectar ao servidor.')
     });
   }
 }

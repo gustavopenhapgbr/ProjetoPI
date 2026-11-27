@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth';
   selector: 'app-login',
   imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css',
 })
 export class Login {
   email: string = '';

@@ -1,69 +1,97 @@
 @if (auth.estaLogado()) {
-  <div class="content-container">
-    <div class="card">
-      <div class="avatar">{{ email[0].toUpperCase() }}</div>
+  <div class="pagina-auth">
+    <div class="luz-roxa luz-1"></div>
+    <div class="luz-roxa luz-2"></div>
 
-      <h1>Meu perfil</h1>
-      <p>Dados da sua conta</p>
+    <div class="perfil-card">
+      <div class="perfil-lateral">
+        <div class="perfil-lateral-topo">
+          <span class="perfil-marca">F Company</span>
+          <span class="perfil-selo">
+            @if (auth.adminLogado) {
+              Admin
+            } @else {
+              Membro
+            }
+          </span>
+        </div>
 
-      <div class="dado">
-        <div class="dado-topo">
-          <span class="rotulo">E-mail</span>
-          @if (!editandoEmail && auth.usuarioLogado !== null) {
-            <button type="button" class="botao-editar" (click)="editarEmail()">Editar</button>
+        <div class="perfil-identidade">
+          <div class="perfil-avatar">{{ email[0].toUpperCase() }}</div>
+          <div class="perfil-titulo">Minha conta</div>
+          <div class="perfil-email">{{ email }}</div>
+        </div>
+
+        <div class="perfil-atalhos">
+          <a class="perfil-atalho" routerLink="/">Voltar para a loja</a>
+
+          @if (auth.usuarioLogado !== null) {
+            <a class="perfil-atalho" routerLink="/carrinho">Ver meu carrinho</a>
+          }
+
+          @if (auth.adminLogado) {
+            <a class="perfil-atalho" routerLink="/admin">Painel administrativo</a>
+          }
+        </div>
+      </div>
+
+      <div class="perfil-conteudo">
+        <span class="auth-tag">Configurações</span>
+        <h1>Dados da conta</h1>
+        <p class="auth-subtitulo">Gerencie suas informações de acesso da F Company.</p>
+
+        <div class="dado-bloco">
+          <div class="dado-topo">
+            <span class="dado-rotulo">E-mail</span>
+            @if (!editandoEmail && auth.usuarioLogado !== null) {
+              <button type="button" class="btn-editar" (click)="editarEmail()">Editar</button>
+            }
+          </div>
+
+          @if (editandoEmail) {
+            <input class="campo-input" type="email" name="novoEmail" [(ngModel)]="novoEmail">
+            <div class="acoes-edicao">
+              <button type="button" class="btn-padrao btn-edicao" (click)="salvarEmail()">Salvar</button>
+              <button type="button" class="btn-padrao btn-edicao" (click)="cancelarEmail()">Cancelar</button>
+            </div>
+          } @else {
+            <div class="dado-caixa">{{ email }}</div>
           }
         </div>
 
-        @if (editandoEmail) {
-          <input class="input-simples" type="email" name="novoEmail" [(ngModel)]="novoEmail" />
-          @if (erroEmail !== '') {
-            <span class="erro">{{ erroEmail }}</span>
-          }
-          <div class="acoes">
-            <button type="button" class="botao-salvar" (click)="salvarEmail()">Salvar</button>
-            <button type="button" class="botao-cancelar" (click)="cancelarEmail()">Cancelar</button>
+        <div class="dado-bloco">
+          <div class="dado-topo">
+            <span class="dado-rotulo">Senha</span>
+            @if (!editandoSenha && auth.usuarioLogado !== null) {
+              <button type="button" class="btn-editar" (click)="editarSenha()">Editar</button>
+            }
           </div>
-        } @else {
-          <span class="valor">{{ email }}</span>
-        }
-      </div>
 
-      <div class="dado">
-        <div class="dado-topo">
-          <span class="rotulo">Senha</span>
-          @if (!editandoSenha && auth.usuarioLogado !== null) {
-            <button type="button" class="botao-editar" (click)="editarSenha()">Editar</button>
+          @if (editandoSenha) {
+            <input class="campo-input" type="password" name="novaSenha" placeholder="Nova senha" [(ngModel)]="novaSenha">
+            <div class="acoes-edicao">
+              <button type="button" class="btn-padrao btn-edicao" (click)="salvarSenha()">Salvar</button>
+              <button type="button" class="btn-padrao btn-edicao" (click)="cancelarSenha()">Cancelar</button>
+            </div>
+          } @else {
+            <div class="dado-caixa">••••••••</div>
           }
         </div>
 
-        @if (editandoSenha) {
-          <input class="input-simples" type="password" name="novaSenha" placeholder="Nova senha" [(ngModel)]="novaSenha" />
-          @if (erroSenha !== '') {
-            <span class="erro">{{ erroSenha }}</span>
-          }
-          <div class="acoes">
-            <button type="button" class="botao-salvar" (click)="salvarSenha()">Salvar</button>
-            <button type="button" class="botao-cancelar" (click)="cancelarSenha()">Cancelar</button>
-          </div>
-        } @else {
-          <span class="valor">••••••••</span>
-        }
-      </div>
+        <div class="perfil-rodape">
+          <button type="button" class="btn-padrao auth-btn" (click)="sair()">Sair da conta</button>
 
-      <button type="button" class="botao-sair" (click)="sair()">Sair da conta</button>
-      @if (auth.usuarioLogado !== null){
-        <button type="button" class="botao-excluir" (click)="excluirConta()">Excluir minha conta</button>
-      }
-    
-      <a routerLink="/" class="link">Voltar para a loja</a>
+          @if (auth.usuarioLogado !== null) {
+            <button type="button" class="btn-excluir" (click)="excluirConta()">Excluir minha conta</button>
+          }
+        </div>
+      </div>
     </div>
   </div>
 } @else {
-  <div class="content-container">
-    <div class="card">
-      <h1>Meu perfil</h1>
-      <p>Você precisa estar logado para ver esta página.</p>
-      <a routerLink="/login" class="link">Fazer login</a>
-    </div>
+  <div class="mensagem-vazia">
+    <p>Acesso necessário</p>
+    <span>Você precisa estar logado para visualizar os dados da sua conta.</span>
+    <a class="btn-padrao btn-voltar" routerLink="/login">Fazer login</a>
   </div>
 }

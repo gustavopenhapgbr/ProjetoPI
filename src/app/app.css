@@ -1,5 +1,21 @@
-* {
-    margin: 0px;
-    box-sizing: border-box;
-    padding: 0px;
+.pagina {
+    display: flex;
+    flex-direction: column;
+}
+
+.conteudo {
+    flex: 1;
+    min-height: calc(100vh - 44px);
+}
+
+@media (max-width: 1024px) {
+    .conteudo {
+        min-height: calc(100vh - 82px);
+    }
+}
+
+@media (max-width: 600px) {
+    .conteudo {
+        min-height: calc(100vh - 122px);
+    }
 }

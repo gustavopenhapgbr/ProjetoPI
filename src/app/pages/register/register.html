@@ -1,26 +1,69 @@
-<div class="content-container">
-  <form>
-    <img src="images/guaxinim.png" alt="F.CUSTOM" class="mascote">
+<div class="pagina-auth">
+  <div class="luz-roxa luz-1"></div>
+  <div class="luz-roxa luz-2"></div>
 
-    <h1>Crie sua conta</h1>
-    <p>Cadastre-se para começar a comprar</p>
+  <div class="auth-split">
+    <form class="auth-form-lado">
+      <span class="auth-tag">Nova conta</span>
+      <h1>Criar conta</h1>
+      <p class="auth-subtitulo">Cadastre-se para começar a comprar na F Company.</p>
 
-    <label for="email">E-mail</label>
-    <input class="input-simples" id="email" name="email" type="email"
-      [(ngModel)]="email" />
+      <div class="auth-campo">
+        <label for="email">E-mail</label>
+        <input
+          class="campo-input"
+          id="email"
+          name="email"
+          type="email"
+          placeholder="seu@email.com"
+          [(ngModel)]="email"
+          (input)="validarFormulario()">
+      </div>
 
-    <label for="senha">Senha</label>
-    <input class="input-simples" id="senha" name="senha" type="password"
-      [(ngModel)]="senha" />
+      <div class="auth-campo">
+        <label for="senha">Senha</label>
+        <input
+          class="campo-input"
+          id="senha"
+          name="senha"
+          type="password"
+          placeholder="Mínimo de 6 caracteres"
+          [(ngModel)]="senha"
+          (input)="validarFormulario()">
+      </div>
 
-    <label for="confirmar-senha">Confirmar senha</label>
-    <input class="input-simples" id="confirmar-senha" name="confirmarSenha" type="password"
-      [(ngModel)]="confirmarSenha" />
+      <div class="auth-campo">
+        <label for="confirmar-senha">Confirmar senha</label>
+        <input
+          class="campo-input"
+          id="confirmar-senha"
+          name="confirmarSenha"
+          type="password"
+          placeholder="Repita sua senha"
+          [(ngModel)]="confirmarSenha"
+          (input)="validarFormulario()">
+      </div>
 
-    @if (erro !== '') {
-      <span class="erro">{{ erro }}</span>
-    }
+      <button
+        type="button"
+        class="btn-padrao auth-btn"
+        [disabled]="botaoDesabilitado"
+        (click)="cadastrar()">
+        Cadastrar
+      </button>
 
-    <button type="button" class="input-submeter" (click)="cadastrar()">Cadastrar</button>
-  </form>
+      <div class="auth-rodape">
+        Já tem uma conta? <a routerLink="/login" class="auth-link">Entrar</a>
+      </div>
+    </form>
+
+    <div class="auth-imagem auth-imagem-direita">
+      <img src="images/register-streetwear.jpg" alt="F Company">
+      <div class="auth-marca">F Company</div>
+      <div class="auth-imagem-texto">
+        <h2>Faça parte</h2>
+        <p>Crie sua conta e acompanhe os próximos lançamentos da F Company.</p>
+      </div>
+    </div>
+  </div>
 </div>

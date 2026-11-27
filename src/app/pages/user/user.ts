@@ -14,11 +14,9 @@ export class User {
 
   editandoEmail: boolean = false;
   novoEmail: string = '';
-  erroEmail: string = '';
 
   editandoSenha: boolean = false;
   novaSenha: string = '';
-  erroSenha: string = '';
 
   constructor(public auth: AuthService, private router: Router) {
     this.email = this.auth.emailLogado();
@@ -26,7 +24,6 @@ export class User {
 
   editarEmail() {
     this.novoEmail = this.email;
-    this.erroEmail = '';
     this.editandoEmail = true;
   }
 
@@ -37,7 +34,7 @@ export class User {
     }
 
     if (!this.auth.validarEmail(this.novoEmail)) {
-      this.erroEmail = 'Digite um e-mail válido.';
+      alert('Digite um e-mail válido.');
       return;
     }
 
@@ -45,7 +42,7 @@ export class User {
       next: (usuarios) => {
         for (let outro of usuarios) {
           if (outro.email === this.novoEmail && outro.id !== usuario.id) {
-            this.erroEmail = 'Já existe uma conta com esse e-mail.';
+            alert('Já existe uma conta com esse e-mail.');
             return;
           }
         }
@@ -55,6 +52,7 @@ export class User {
             this.auth.registrarLogin(usuarioAtualizado);
             this.email = usuarioAtualizado.email;
             this.editandoEmail = false;
+            alert('E-mail alterado.');
           },
           error: () => alert('Erro ao alterar o e-mail.')
         });
@@ -69,7 +67,6 @@ export class User {
 
   editarSenha() {
     this.novaSenha = '';
-    this.erroSenha = '';
     this.editandoSenha = true;
   }
 
@@ -80,7 +77,7 @@ export class User {
     }
 
     if (this.novaSenha.length < 6) {
-      this.erroSenha = 'A senha precisa ter pelo menos 6 caracteres.';
+      alert('A senha precisa ter pelo menos 6 caracteres.');
       return;
     }
 

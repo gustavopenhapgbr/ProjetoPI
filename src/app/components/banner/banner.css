@@ -1,20 +1,53 @@
 .banner {
     width: 100%;
-    height: 390px;
-
     position: relative;
-
     overflow: hidden;
+    border-bottom: 1px solid #000000;
+    background-color: #000000;
 }
 
-
-.banner>img {
+.banner img,
+.banner video {
     width: 100%;
     height: 100%;
-
     display: block;
-
     object-fit: cover;
 }
 
+.texto-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+    color: #FFFFFF;
+    padding: 64px 16px 20px 16px;
+}
 
+.texto-banner h2 {
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.texto-banner p {
+    max-width: 440px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #B2B2B2;
+}
+
+@media (max-width: 600px) {
+    .texto-banner {
+        padding: 48px 14px 16px 14px;
+    }
+
+    .texto-banner h2 {
+        font-size: 12px;
+    }
+
+    .texto-banner p {
+        font-size: 11px;
+    }
+}

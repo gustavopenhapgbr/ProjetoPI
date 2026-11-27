@@ -1,43 +1,47 @@
 <header>
-  <div class="logo">
-    <a routerLink="/">F.Company</a>
+  <div class="item-logo">
+    <img class="logo-guaxinim" src="images/guaxinim.png" alt="F Company">
   </div>
+
+  <a class="btn-padrao item-menu item-destaque" routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">Destaques</a>
 
   <div class="pesquisa">
-    <input type="text" name="termo" placeholder="Pesquisar produto"
+    <span class="lupa" (click)="pesquisar()">⌕</span>
+    <input
+      type="text"
+      name="termo"
+      placeholder="Pesquise por camisetas, calças, shorts, etc..."
       [(ngModel)]="termo"
       (keyup.enter)="pesquisar()">
-    <span (click)="pesquisar()">⌕</span>
   </div>
 
-  <div class="opcoes">
-    <div class="fale-conosco">
-      <img src="images/faleConosco.jpg" alt="Fale Conosco">
-      <span>Fale Conosco</span>
+  <div class="categorias">
+    <a class="btn-padrao item-menu item-categoria" routerLink="/camisetas" routerLinkActive="ativo">Camisetas</a>
+    <a class="btn-padrao item-menu item-categoria" routerLink="/calcas" routerLinkActive="ativo">Calças</a>
+    <a class="btn-padrao item-menu item-categoria" routerLink="/shorts" routerLinkActive="ativo">Shorts</a>
+    <a class="btn-padrao item-menu item-categoria" routerLink="/conjuntos" routerLinkActive="ativo">Conjuntos</a>
+    <a class="btn-padrao item-menu item-categoria item-categoria-ultima" routerLink="/acessorios" routerLinkActive="ativo">Acessórios</a>
+  </div>
+
+  <a class="btn-padrao item-menu item-carrinho" routerLink="/carrinho" routerLinkActive="ativo">Carrinho</a>
+
+  <div class="usuario">
+    <div class="btn-padrao item-icone usuario-link">
+      <img class="icone" src="images/usericon.png" alt="Usuário">
     </div>
 
-    <a class="carrinho-button" routerLink="/carrinho">
-      <img class="icone" src="images/carrinho.png" alt="Carrinho">
-    </a>
+    <div class="dropdown">
+      @if (auth.adminLogado) {
+        <a routerLink="/admin">Painel Administrativo</a>
+      }
 
-    <div class="usuario">
-      <div class="usuario-link">
-        <img src="images/usuario.png" class="icone" alt="Usuário">
-      </div>
-
-      <div class="dropdown">
-        @if (auth.adminLogado) {
-          <a routerLink="/admin">Painel Administrativo</a>
-        }
-
-        @if (auth.estaLogado()) {
-          <a routerLink="/perfil">Minha conta</a>
-          <a (click)="sair()">Sair</a>
-        } @else {
-          <a routerLink="/login">Entrar</a>
-          <a routerLink="/register">Criar conta</a>
-        }
-      </div>
+      @if (auth.estaLogado()) {
+        <a routerLink="/perfil">Minha conta</a>
+        <a (click)="sair()">Sair</a>
+      } @else {
+        <a routerLink="/login">Entrar</a>
+        <a routerLink="/register">Criar conta</a>
+      }
     </div>
   </div>
 </header>

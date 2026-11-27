@@ -1,167 +1,204 @@
 @if (auth.adminLogado) {
-<section class="admin-section">
-  <section class="painel-admin">
-  <div class="topo-admin">
-    <h1>Painel Administrativo</h1>
-    <button class="btn-sair" (click)="sair()">Sair</button>
-  </div>
-
-  <div class="form-produto">
-    <h2>{{ editando ? 'Editar produto' : 'Adicionar produto' }}</h2>
-
-    @if (editando) {
-  <label for="id">ID</label>
-  <input id="id" name="id" type="text" [ngModel]="produtoEmEdicao.id" disabled />
-}
-
-    <label for="nome">Nome do produto</label>
-    <input
-      id="nome"
-      type="text"
-      [(ngModel)]="produtoEmEdicao.nome"
-      placeholder="Ex: Camiseta Preta"
-    />
-
-    <label for="preco">Preço (R$)</label>
-    <input
-      id="preco"
-      type="number"
-      min="0"
-      step="0.01"
-      [(ngModel)]="produtoEmEdicao.preco"
-      placeholder="Ex: 79.90"
-    />
-
-    <label for="categoria">Categoria</label>
-    <select id="categoria" [(ngModel)]="produtoEmEdicao.categoria">
-      @for (categoria of categorias; track categoria) {
-        <option [value]="categoria">{{ categoria }}</option>
-      }
-    </select>
-
-    <label for="imagem">Imagem</label>
-    <select id="imagem" [(ngModel)]="produtoEmEdicao.imagem">
-      <option value="">Sem imagem</option>
-      @for (imagem of imagens; track imagem) {
-        <option [value]="imagem">{{ imagem }}</option>
-      }
-    </select>
-
-    @if (produtoEmEdicao.imagem !== '') {
-      <img
-        [src]="produtoEmEdicao.imagem"
-        [alt]="produtoEmEdicao.nome"
-        class="imagem-preview"
-      />
-    }
-
-    <label for="descricao">Descrição</label>
-    <textarea
-      id="descricao"
-      [(ngModel)]="produtoEmEdicao.descricao"
-      placeholder="Descrição do produto"
-    ></textarea>
-
-    <label>Quantidade em estoque por tamanho</label>
-    <div class="estoque-tamanhos">
-      <div class="campo-tamanho">
-        <label for="estoqueP">P</label>
-        <input id="estoqueP" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueP" />
+  <div class="pagina-central">
+    <div class="cabecalho-pagina">
+      <div>
+        <span class="auth-tag">F Company</span>
+        <h1>Painel administrativo</h1>
       </div>
-      <div class="campo-tamanho">
-        <label for="estoqueM">M</label>
-        <input id="estoqueM" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueM" />
-      </div>
-      <div class="campo-tamanho">
-        <label for="estoqueG">G</label>
-        <input id="estoqueG" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueG" />
-      </div>
-      <div class="campo-tamanho">
-        <label for="estoqueGG">GG</label>
-        <input id="estoqueGG" type="number" min="0" step="1" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueGG" />
-      </div>
+      <span class="cabecalho-contagem">{{ produtos.length }} produtos em {{ grupos.length }} categorias</span>
     </div>
 
-    <label class="campo-destaque">
-      <input
-        type="checkbox"
-        [(ngModel)]="produtoEmEdicao.destaque"
-      />
-      Produto em destaque nesta categoria
-    </label>
-
-
-      <button class="btn-salvar" (click)="salvarProduto()">
-        {{ editando ? 'Salvar alterações' : 'Adicionar produto' }}
-      </button>
-      @if (editando) {
-        <button class="btn-cancelar" (click)="cancelarEdicao()">
-          Cancelar
-        </button>
-      }
-    </div>
-
-
-  <div class="lista-produtos">
-    <h2>Produtos cadastrados ({{ produtos.length }} em {{ grupos.length }} categorias)</h2>
-
-    @if (produtos.length === 0) {
-      <p class="vazio">
-        Nenhum produto cadastrado ainda.
-      </p>
-    } @else {
-      <table>
-        <thead>
-          <tr>
-            <th>Categoria</th>
-            <th>Quantidade</th>
-            <th>Preço</th>
-            <th>Destaque</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        @for (grupo of grupos; track grupo.categoria) {
-          <tbody>
-            <tr class="linha-categoria">
-              <td>{{ grupo.categoria }}</td>
-              <td><span class="contagem">{{ grupo.quantidade }}</span></td>
-              <td>{{ formatarFaixaPreco(grupo) }}</td>
-              <td>{{ grupo.emDestaque }}</td>
-              <td class="acoes">
-                <button class="btn-detalhes" (click)="alternarCategoria(grupo)">
-                  {{ grupo.aberto ? 'Ocultar' : 'Ver produtos' }}
-                </button>
-              </td>
-            </tr>
-            @if (grupo.aberto) {
-              @for (produto of grupo.produtos; track produto.id) {
-                <tr class="linha-produto">
-                  <td>↳ {{ produto.nome }}</td>
-                  <td>
-                    {{ produtoService.totalEstoque(produto) }}
-                    <small>
-                      (P: {{ produto.estoqueP }} · M: {{ produto.estoqueM }} ·
-                      G: {{ produto.estoqueG }} · GG: {{ produto.estoqueGG }})
-                    </small>
-                  </td>
-                  <td>{{ formatarPreco(produto.preco) }}</td>
-                  <td>{{ produto.destaque ? 'Sim' : 'Não' }}</td>
-                  <td class="acoes">
-                   <button class="btn-editar" [routerLink]="['/admin-produto-editar', produto.id]">Editar</button>
-                    <button class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
-                  </td>
-                </tr>
-              }
-            }
-          </tbody>
+    <div class="caixa">
+      <div class="caixa-topo topo-admin">
+        <span>{{ editando ? 'Editar produto' : 'Adicionar produto' }}</span>
+        @if (editando) {
+          <span class="selo-roxo">Editando #{{ produtoEmEdicao.id }}</span>
         }
-      </table>
-    }
+      </div>
+
+      <div class="form-corpo">
+        @if (editando) {
+          <div class="campo-bloco">
+            <label for="id">ID</label>
+            <input id="id" name="id" type="text" class="campo-input" [ngModel]="produtoEmEdicao.id" disabled>
+          </div>
+        }
+
+        <div class="form-linha">
+          <div class="campo-bloco">
+            <label for="nome">Nome do produto</label>
+            <input
+              id="nome"
+              type="text"
+              class="campo-input"
+              [(ngModel)]="produtoEmEdicao.nome"
+              placeholder="Ex: Camiseta Preta">
+          </div>
+
+          <div class="campo-bloco">
+            <label for="preco">Preço (R$)</label>
+            <input
+              id="preco"
+              type="number"
+              min="0"
+              step="0.01"
+              class="campo-input"
+              [(ngModel)]="produtoEmEdicao.preco"
+              placeholder="Ex: 79.90">
+          </div>
+        </div>
+
+        <div class="form-linha">
+          <div class="campo-bloco">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" class="campo-input" [(ngModel)]="produtoEmEdicao.categoria">
+              @for (categoria of categorias; track categoria) {
+                <option [value]="categoria">{{ categoria }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="campo-bloco">
+            <label for="imagem">Imagem</label>
+            <select id="imagem" class="campo-input" [(ngModel)]="produtoEmEdicao.imagem">
+              <option value="">Sem imagem</option>
+              @for (imagem of imagens; track imagem) {
+                <option [value]="imagem">{{ imagem }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        @if (produtoEmEdicao.imagem !== '') {
+          <div class="preview-bloco">
+            <img [src]="produtoEmEdicao.imagem" [alt]="produtoEmEdicao.nome" class="imagem-preview">
+            <div class="preview-info">
+              <span class="preview-rotulo">Prévia da imagem</span>
+              <span class="preview-caminho">{{ produtoEmEdicao.imagem }}</span>
+            </div>
+          </div>
+        }
+
+        <div class="campo-bloco">
+          <label for="descricao">Descrição</label>
+          <textarea
+            id="descricao"
+            class="campo-input campo-area"
+            [(ngModel)]="produtoEmEdicao.descricao"
+            placeholder="Descrição do produto"></textarea>
+        </div>
+
+        <div class="campo-bloco">
+          <label>Estoque por tamanho</label>
+          <div class="estoque-grade">
+            <div class="campo-tamanho">
+              <label for="estoqueP">P</label>
+              <input id="estoqueP" type="number" min="0" step="1" class="campo-input" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueP">
+            </div>
+            <div class="campo-tamanho">
+              <label for="estoqueM">M</label>
+              <input id="estoqueM" type="number" min="0" step="1" class="campo-input" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueM">
+            </div>
+            <div class="campo-tamanho">
+              <label for="estoqueG">G</label>
+              <input id="estoqueG" type="number" min="0" step="1" class="campo-input" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueG">
+            </div>
+            <div class="campo-tamanho">
+              <label for="estoqueGG">GG</label>
+              <input id="estoqueGG" type="number" min="0" step="1" class="campo-input" placeholder="0" [(ngModel)]="produtoEmEdicao.estoqueGG">
+            </div>
+          </div>
+        </div>
+
+        <label class="campo-destaque">
+          <input type="checkbox" [(ngModel)]="produtoEmEdicao.destaque">
+          Produto em destaque nesta categoria
+        </label>
+
+        <div class="form-botoes">
+          <button type="button" class="btn-padrao btn-acao" (click)="salvarProduto()">
+            {{ editando ? 'Salvar alterações' : 'Adicionar produto' }}
+          </button>
+          @if (editando) {
+            <button type="button" class="btn-padrao btn-acao" (click)="cancelarEdicao()">Cancelar</button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="caixa caixa-lista">
+      <div class="caixa-topo">
+        Produtos cadastrados ({{ produtos.length }})
+      </div>
+
+      @if (produtos.length === 0) {
+        <div class="lista-vazia">Nenhum produto cadastrado ainda.</div>
+      } @else {
+        @for (grupo of grupos; track grupo.categoria) {
+          <div class="grupo-bloco">
+            <div class="grupo-linha">
+              <div class="grupo-info">
+                <div class="grupo-titulo">
+                  <span class="grupo-nome">{{ grupo.categoria }}</span>
+                  <span class="tag-cinza">{{ grupo.quantidade }} itens</span>
+                </div>
+                <div class="grupo-meta">
+                  <span class="grupo-preco">{{ formatarFaixaPreco(grupo) }}</span>
+                  <span>·</span>
+                  <span>Destaque: {{ grupo.emDestaque }}</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="btn-padrao btn-mini"
+                [class.ativo]="grupo.aberto"
+                (click)="alternarCategoria(grupo)">
+                {{ grupo.aberto ? 'Ocultar' : 'Ver produtos' }}
+              </button>
+            </div>
+
+            @if (grupo.aberto) {
+              <div class="grupo-itens">
+                @for (produto of grupo.produtos; track produto.id) {
+                  <div class="produto-linha">
+                    <div class="produto-esquerda">
+                      @if (produto.imagem !== '') {
+                        <div class="produto-thumb">
+                          <img [src]="produto.imagem" [alt]="produto.nome">
+                        </div>
+                      }
+                      <div class="produto-dados">
+                        <div class="produto-topo-linha">
+                          <span class="produto-nome">{{ produto.nome }}</span>
+                          @if (produto.destaque) {
+                            <span class="selo-roxo">Destaque</span>
+                          }
+                        </div>
+                        <div class="produto-meta">
+                          <span class="produto-preco">{{ formatarPreco(produto.preco) }}</span>
+                          <span>· Estoque: {{ produtoService.totalEstoque(produto) }} (P: {{ produto.estoqueP }} · M: {{ produto.estoqueM }} · G: {{ produto.estoqueG }} · GG: {{ produto.estoqueGG }})</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="produto-acoes">
+                      <button type="button" class="btn-padrao btn-mini" [routerLink]="['/admin-produto-editar', produto.id]">Editar</button>
+                      <button type="button" class="btn-remover" (click)="removerProduto(produto.id)">Remover</button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
   </div>
-</section>
-</section>
 } @else {
-  <section class="admin-section">
-    <p class="vazio">Área restrita ao administrador. <a routerLink="/login">Fazer login</a></p>
-  </section>
+  <div class="mensagem-vazia">
+    <p>Área restrita</p>
+    <span>Você precisa estar logado como administrador para acessar este painel.</span>
+    <a class="btn-padrao btn-voltar" routerLink="/login">Fazer login</a>
+  </div>
 }

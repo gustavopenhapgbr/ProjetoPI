@@ -7,32 +7,28 @@ import { Produto } from '../../model/produto';
   selector: 'app-catalogo',
   imports: [RouterLink],
   templateUrl: './catalogo.html',
-  styleUrl: './catalogo.css',
 })
 export class Catalogo implements OnInit {
 
   categorias = [
-    { chave: 'camisetas', titulo: 'Camisetas', subtitulo: 'Detalhes que completam o seu estilo.' },
-    { chave: 'calcas', titulo: 'Calças', subtitulo: 'Conforto e personalidade em todos os momentos.' },
-    { chave: 'shorts', titulo: 'Shorts', subtitulo: 'Leveza e estilo para acompanhar sua rotina.' },
-    { chave: 'conjuntos', titulo: 'Conjuntos', subtitulo: 'Produções completas para facilitar suas escolhas.' },
-    { chave: 'acessorios', titulo: 'Acessórios', subtitulo: 'Detalhes que completam o seu estilo.' }
+    { chave: 'camisetas', titulo: 'Camisetas' },
+    { chave: 'calcas', titulo: 'Calças' },
+    { chave: 'shorts', titulo: 'Shorts' },
+    { chave: 'conjuntos', titulo: 'Conjuntos' },
+    { chave: 'acessorios', titulo: 'Acessórios' }
   ];
 
   titulo: string = '';
-  subtitulo: string = '';
   produtos: Produto[] = [];
 
   constructor(private produtoService: ProdutoService, private router: Router) {}
 
   ngOnInit(): void {
-    
     let categoriaAtual = this.router.url.replace('/', '');
 
     for (let categoria of this.categorias) {
       if (categoria.chave === categoriaAtual) {
         this.titulo = categoria.titulo;
-        this.subtitulo = categoria.subtitulo;
       }
     }
 

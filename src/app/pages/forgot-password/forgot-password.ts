@@ -7,21 +7,27 @@ import { AuthService } from '../../services/auth';
   selector: 'app-forgot-password',
   imports: [FormsModule, RouterLink],
   templateUrl: './forgot-password.html',
-  styleUrl: './forgot-password.css',
 })
 export class ForgotPassword {
   email: string = '';
-  erro: string = '';
+  botaoDesabilitado: boolean = true;
 
   constructor(private auth: AuthService) {}
 
+  validarFormulario() {
+    if (this.email.trim() !== '') {
+      this.botaoDesabilitado = false;
+    } else {
+      this.botaoDesabilitado = true;
+    }
+  }
+
   enviarLink() {
     if (this.email.trim() === '') {
-      this.erro = 'Digite seu e-mail.';
+      alert('Digite seu e-mail.');
     } else if (!this.auth.validarEmail(this.email)) {
-      this.erro = 'Digite um e-mail válido.';
+      alert('Digite um e-mail válido.');
     } else {
-      this.erro = '';
       alert('Se o e-mail estiver cadastrado, você receberá um link para redefinir sua senha.');
     }
   }

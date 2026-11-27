@@ -85,11 +85,6 @@ export class Admin implements OnInit {
     });
   }
 
-  sair() {
-    this.auth.sair();
-    this.router.navigate(['/']);
-  }
-
   montarGrupos() {
     let abertas: string[] = [];
     for (let grupo of this.grupos) {
