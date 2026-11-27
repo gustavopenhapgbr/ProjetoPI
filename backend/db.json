@@ -2,45 +2,34 @@
   "usuarios": [
     {
       "id": "1",
-      "email": "cliente@gmail.com",
-      "senha": "cliente123456"
-    },
-    {
-      "id": "DnCF6BLB7QA",
-      "email": "cliente2@gmail.com",
-      "senha": "123456"
-    },
-    {
-      "id": "8BCwZePSk1s",
-      "email": "cliente3@gmail.com",
-      "senha": "123456"
-    },
-    {
-      "id": "4",
-      "email": "cliente4@gmail.com",
-      "senha": "123456"
-    },
-    {
-      "id": "5",
-      "email": "cliente5@gmail.com",
-      "senha": "123456"
-    },
-    {
-      "id": "6",
-      "email": "davi@gmail.com",
-      "senha": "123123"
-    },
-    {
-      "id": "7",
-      "email": "j@gmail.com",
-      "senha": "123123"
-    },
-
-    {
-      "id": "8",
       "email": "admin@gmail.com",
       "senha": "admin123",
-      "admin": "true"
+      "admin": true
+    },
+    {
+      "email": "d@gmail.com",
+      "senha": "123123",
+      "id": "bDz3q70"
+    },
+    {
+      "email": "g@gmail.com",
+      "senha": "123123",
+      "id": "-sRLV3T"
+    },
+    {
+      "email": "l@gmail.com",
+      "senha": "123123",
+      "id": "xpyQOfz"
+    },
+    {
+      "email": "k@gmail.com",
+      "senha": "123123",
+      "id": "90on3XF"
+    },
+    {
+      "email": "v@gmail.com",
+      "senha": "123123",
+      "id": "c2vqQ03"
     }
   ],
   "produtos": [
@@ -359,23 +348,42 @@
   ],
   "carrinho": [
     {
-      "usuarioId": "6",
+      "usuarioId": "bDz3q70",
       "produto": {
-        "id": 2,
-        "nome": "Camiseta Cinza Escura",
-        "preco": 89.9,
-        "categoria": "camisetas",
-        "imagem": "images/camiseta_2_cinza_escuro.png",
-        "descricao": "Camiseta cinza escura.",
+        "id": 13,
+        "nome": "Shorts Cinza Claro Script",
+        "preco": 99.9,
+        "categoria": "shorts",
+        "imagem": "images/shorts_3_cinza_claro_script.png",
+        "descricao": "Shorts cinza claro com escrita.",
         "destaque": false,
-        "estoqueP": 2,
-        "estoqueM": 0,
+        "estoqueP": 5,
+        "estoqueM": 5,
         "estoqueG": 5,
         "estoqueGG": 5
       },
-      "tamanho": "P",
+      "tamanho": "M",
       "quantidade": 1,
       "id": 1
+    },
+    {
+      "usuarioId": "bDz3q70",
+      "produto": {
+        "id": 6,
+        "nome": "Calça Cinza Logo Lateral",
+        "preco": 159.9,
+        "categoria": "calcas",
+        "imagem": "images/calca_1_cinza_logo_lateral.png",
+        "descricao": "Calça cinza com logo lateral.",
+        "destaque": true,
+        "estoqueP": 5,
+        "estoqueM": 5,
+        "estoqueG": 5,
+        "estoqueGG": 5
+      },
+      "tamanho": "M",
+      "quantidade": 1,
+      "id": 2
     }
   ],
   "pedidos": [],
